@@ -53,7 +53,9 @@ if ($u === $usuarioAdmin && $c === $claveAdmin) {
   exit;
 }
 
-
+/** ------------------------------------------------------------
+ *  Caso 2: Usuario hardcodeado "Administrador" (sede_id = 5)
+ * ------------------------------------------------------------ */
 if ($u === $usuarioMeta && $c === $claveMeta) {
   $_SESSION = [];
   session_regenerate_id(true);

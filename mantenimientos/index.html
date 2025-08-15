@@ -2619,12 +2619,221 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// OJO: incluir credenciales para conservar la sesión
-fetch('http://192.168.100.20/mantenimientos/registros_list.php?limit=50&offset=0&q=hytera', {
-  credentials: 'include'
-}).then(r=>r.json()).then(console.log);
 
 </script>
+<script>
+// ===========================
+// Helpers de sesión (Front)
+// ===========================
+function guardarSesion({ usuario, role, sede_id, sede_nombre }) {
+  sessionStorage.setItem("usuario", usuario || "");
+  sessionStorage.setItem("role", (role || "").toLowerCase() === "admin" ? "admin" : "user");
+  sessionStorage.setItem("sede_id", (sede_id ?? "").toString());
+  sessionStorage.setItem("sede_nombre", sede_nombre || "");
+}
+
+function limpiarSesion() {
+  sessionStorage.removeItem("usuario");
+  sessionStorage.removeItem("role");
+  sessionStorage.removeItem("sede_id");
+  sessionStorage.removeItem("sede_nombre");
+  sessionStorage.removeItem("isLoggedIn"); // importante
+}
+
+// ===========================
+// Video de fondo (Robusto)
+// ===========================
+function applyVideoBaseStyles(v) {
+  if (!v) return;
+  v.style.position  = "fixed";
+  v.style.top       = "0";
+  v.style.left      = "0";
+  v.style.width     = "100vw";
+  v.style.height    = "100vh";
+  v.style.objectFit = "cover";
+  v.style.zIndex    = "-1"; // SIEMPRE al fondo
+}
+
+function resurrectVideoIfMissing() {
+  let v = document.getElementById("video-fondo");
+  if (v) return v;
+
+  const login = document.getElementById("login");
+  v = document.createElement("video");
+  v.id = "video-fondo";
+  v.autoplay = true;
+  v.muted = true;
+  v.loop = true;
+  v.playsInline = true;
+
+  const source = document.createElement("source");
+  source.src = "VIDEO/VIDEO-MP4.mp4";
+  source.type = "video/mp4";
+  v.appendChild(source);
+
+  const where = login?.parentNode || document.body;
+  where.insertBefore(v, login || where.firstChild);
+  return v;
+}
+
+function showVideoBackground() {
+  const v = resurrectVideoIfMissing();
+  applyVideoBaseStyles(v);
+  v.style.removeProperty("display");
+  v.style.display = "block";
+  v.muted = true;
+  v.playsInline = true;
+  try { v.currentTime = 0; } catch (_) {}
+  try { v.load(); } catch (_) {}
+  const p = v.play?.();
+  if (p && typeof p.catch === "function") p.catch(() => {});
+}
+
+function hideVideoBackground() {
+  const v = document.getElementById("video-fondo");
+  if (!v) return;
+  try { v.pause?.(); } catch (_) {}
+  v.style.display = "none";
+}
+
+// ===========================
+// Badge de sede
+// ===========================
+function setBadgeSede({ role, sedeNombre }) {
+  const badge = document.getElementById("nombreSede");
+  if (!badge) return;
+  const normalizar = (txt) => {
+    if (!txt) return "";
+    const t = (txt || "").toLowerCase();
+    if (t.includes("meta")) return "Regional Meta_Fincas";
+    if (t.includes("bogota") || t.includes("bogotá")) return "Regional Bogotá";
+    if (t.includes("santander")) return "Regional Santander";
+   if (t.includes("frigor") || t.includes("cundinamarca")) return "Regional Frigorífico";
+
+    return txt;
+  };
+  const bonito = normalizar(sedeNombre);
+  const esAdmin = (role || "").toLowerCase() === "admin";
+  badge.textContent = esAdmin
+    ? `Administrador — ${bonito || "Regional Meta_Fincas"}`
+    : `${bonito || "Sin sede"}`;
+}
+
+function renderSedeDesdeSesion() {
+  setBadgeSede({
+    role: sessionStorage.getItem("role") || "",
+    sedeNombre: sessionStorage.getItem("sede_nombre") || ""
+  });
+}
+
+// ===========================
+// Vistas (login / app)
+// ===========================
+function mostrarApp() {
+  document.getElementById("login")?.classList.add("oculto");
+  document.getElementById("app")?.classList.remove("oculto");
+  // al estar dentro de la app, ocultamos el video
+  hideVideoBackground();
+}
+
+function mostrarLogin() {
+  document.getElementById("app")?.classList.add("oculto");
+  document.getElementById("login")?.classList.remove("oculto");
+  // asegurar que el video exista y se vea
+  showVideoBackground();
+}
+
+// ===========================
+// INIT
+// ===========================
+document.addEventListener("DOMContentLoaded", () => {
+  // 1) Asegura que el video exista y tenga estilos base al cargar
+  const v0 = resurrectVideoIfMissing();
+  applyVideoBaseStyles(v0);
+
+  // 2) Detecta si vienes del servidor con ?logout=1 (desde logout.php)
+  const qs = new URLSearchParams(location.search);
+  if (qs.has("logout")) {
+    // limpieza del front y forzar vista de login + video
+    limpiarSesion();
+    showVideoBackground();
+
+    const login = document.getElementById("login");
+    const app   = document.getElementById("app");
+    if (app)   { app.classList.add("oculto"); app.style.display = "none"; }
+    if (login) { login.classList.remove("oculto"); login.style.display = "flex"; }
+
+    // quitar el parámetro para que no se repita
+    history.replaceState({}, "", location.pathname);
+  }
+
+  // 3) Estado inicial normal
+  if (sessionStorage.getItem("usuario")) {
+    mostrarApp();
+    renderSedeDesdeSesion();
+  } else {
+    mostrarLogin();
+  }
+
+  // 4) Login normal (validar_login.php)
+  const form = document.getElementById("login-form");
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const usuario = document.getElementById("usuario").value.trim();
+    const clave   = document.getElementById("clave").value;
+    const errorBox = document.getElementById("error-login");
+    if (errorBox) { errorBox.textContent = ""; errorBox.classList.add("oculto"); }
+
+    try {
+      const resp = await fetch("validar_login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usuario, clave })
+      });
+      const data = await resp.json();
+
+      if (data?.success) {
+        const role = data.role || "user";
+        const sede_nombre_calc =
+          data.sede_nombre || (String(role).toLowerCase() === "admin" ? "Regional Meta_Fincas" : "");
+
+        guardarSesion({
+          usuario,
+          role,
+          sede_id: data.sede_id,
+          sede_nombre: sede_nombre_calc
+        });
+
+        // Nota: si es admin y rediriges al panel, tu backend lo maneja.
+        mostrarApp();
+        setBadgeSede({ role, sedeNombre: sede_nombre_calc });
+      } else {
+        const msg = data?.error || "Usuario o contraseña no válidos";
+        if (errorBox) { errorBox.textContent = msg; errorBox.classList.remove("oculto"); }
+        else { alert(msg); }
+      }
+    } catch (err) {
+      console.error("Error de login:", err);
+      if (errorBox) { errorBox.textContent = "Error de conexión"; errorBox.classList.remove("oculto"); }
+      else { alert("Error de conexión"); }
+    }
+  });
+
+  // 5) Logout desde el index -> usa logout.php (servidor) y vuelve con ?logout=1
+  document.getElementById("btn-logout")?.addEventListener("click", () => {
+    window.location.href = "logout.php";
+  });
+
+  // 6) Si vuelves al tab y no hay sesión, reintenta mostrar el video (autoplay)
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && !sessionStorage.getItem("usuario")) {
+      showVideoBackground();
+    }
+  });
+});
+</script>
+
+
 
 
 </body>
