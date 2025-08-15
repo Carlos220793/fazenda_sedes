@@ -30,7 +30,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      min-width: 220%;
+      min-width: 100%;
       min-height: 100%;
       object-fit: cover;
       z-index: -1;
@@ -1388,30 +1388,82 @@ function toSnake(r) {
   for (const [k,v] of Object.entries(r)) out[m(k)] = v;
   return out;
 }
+async function sincronizarRegistros() {
+  const ctrl = new AbortController();
+  const timeoutMs = 15000;
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
 
-function sincronizarRegistros() {
-  fetch(API_BASE + "obtener_registros.php", {
-    credentials: 'include'  // <-- Esto envía la cookie de sesión
-  })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
+  try {
+    const res = await fetch(API_BASE + "obtener_registros.php", {
+      method: "GET",
+      credentials: "include",            // 1) Enviar cookie de sesión
+      headers: { "Accept": "application/json" },
+      signal: ctrl.signal                // 5) Timeout con AbortController
+    });
+
+    const ctype = res.headers.get("content-type") || "";
+
+    // 2) Manejo explícito de 401
+    if (res.status === 401) {
+      console.warn("Sesión expirada o no iniciada (401).");
+      alert("⚠️ Tu sesión expiró. Por favor inicia sesión de nuevo.");
+      // Opcional: redirigir al login
+      // window.location.href = "login.html";
+      return;
+    }
+
+    // 3) Si no es OK, prepara un error con detalle del cuerpo
+    if (!res.ok) {
+      let bodyText = "";
+      try {
+        if (ctype.includes("application/json")) {
+          const j = await res.json();
+          bodyText = j?.error || JSON.stringify(j);
+        } else {
+          bodyText = await res.text();
+        }
+      } catch (_) {
+        /* sin cuerpo útil */
       }
-      return res.json();
-    })
-    .then(data => {
-      registros = (data || []).map(toCamel);
-      if (currentSection === 'registrar') {
-        renderizarRegistros();
-      } else {
-        buscarRegistros();
-      }
-      actualizarEstadisticas();
-    })
-    .catch(err => {
+      throw new Error(`HTTP ${res.status}${bodyText ? " - " + bodyText : ""}`);
+    }
+
+    // 4) Parseo/normalización de datos
+    let payload = [];
+    if (ctype.includes("application/json")) {
+      payload = await res.json();
+    } else {
+      payload = [];
+    }
+
+    // Acepta tanto un array plano como { data: [...] }
+    const lista = Array.isArray(payload)
+      ? payload
+      : (Array.isArray(payload?.data) ? payload.data : []);
+
+    // toCamel sobre cada registro
+    registros = (lista || []).map(toCamel);
+
+    // Mantén tu flujo actual
+    if (currentSection === "registrar") {
+      renderizarRegistros();
+    } else {
+      buscarRegistros();
+    }
+    actualizarEstadisticas();
+
+  } catch (err) {
+    // 6) Mensajes claros
+    if (err?.name === "AbortError") {
+      console.error("Sincronización abortada por timeout:", err);
+      alert("⏳ La solicitud tardó demasiado. Intenta de nuevo.");
+    } else {
       console.error("Error al sincronizar registros:", err);
       alert("❌ Error al sincronizar registros");
-    });
+    }
+  } finally {
+    clearTimeout(t);
+  }
 }
 
 

@@ -168,8 +168,8 @@ td.acciones { width: 460px !important; }
   <a href="../logout.php" class="btn-logout">🚪 Cerrar sesión</a>
 
   <div class="container">
-    <h1 class="titulo-admin">Panel Administrator</h1>
-<p class="subtitulo-admin">Gestiona o modifica los valores que usa en el formulario principal</p>
+    <h1 class="titulo-admin">Panel Administrator📊</h1>
+<p class="subtitulo-admin">⚙️Gestiona o modifica los valores que usa en el formulario principal</p>
 
     <?php
       $mensaje = $_GET['msg'] ?? '';
