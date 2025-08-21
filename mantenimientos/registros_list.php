@@ -21,7 +21,7 @@ $cn->set_charset("utf8mb4");
 $rol    = $_SESSION["rol"] ?? "user";
 $sedeId = $_SESSION["sede_id"] ?? null;
 
-// DEBUG opcional: ?debug=1 te devuelve lo que está usando
+
 if (isset($_GET['debug'])) {
   echo json_encode(["rol"=>$rol, "sede_id"=>$sedeId, "session"=>$_SESSION]); exit;
 }
@@ -34,7 +34,7 @@ if ($rol === "admin") {
   $stmt = $cn->prepare($sql);
   $stmt->bind_param("ii", $limit, $offset);
 } else {
-  if ($sedeId === null) { // si no hay sede para user, no dejamos pasar
+  if ($sedeId === null) { 
     http_response_code(400); echo json_encode(["error"=>"sede_missing"]); exit;
   }
   $sql = "SELECT * FROM registros WHERE sede_id = ? ORDER BY fecha DESC, id DESC LIMIT ? OFFSET ?";

@@ -907,13 +907,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-  <!-- Video de fondo solo en login -->
+  
   <video id="video-fondo" autoplay muted loop>
     <source src="VIDEO/VIDEO-MP4.mp4" type="video/mp4">
     Tu navegador no soporta video.
   </video>
 
-  <!-- Pantalla de Login -->
+ 
   <div class="login-container" id="login">
   <div class="login-box">
     <span class="esquinas-luz"></span>
@@ -939,7 +939,7 @@
   </div>
 </div>
 
-   <!-- Aplicación principal -->
+  
   <div id="app">
     <header class="app-header">
       <div class="titulo-con-imagen">
@@ -964,7 +964,7 @@
   </div>
 </div>
 
-    </header>
+</header>
 
 
     <div class="stats-container">
@@ -987,7 +987,7 @@
     </div>
 
   
-   <!-- Sección de Registro -->
+   
 <section id="registrar">
   <h2>Registrar Nuevo Mantenimiento</h2>
   <form id="form-registro">
@@ -1071,11 +1071,11 @@
 </section>
 
 
-      <!-- Lista de registros -->
+     
       <ul id="lista" style="margin-top: 2rem;"></ul>
     </section>
 
-    <!-- Sección de Búsqueda -->
+    
     <section id="buscar">
       <h2>Buscar Mantenimientos</h2>
       <div class="search-controls">
@@ -1098,7 +1098,7 @@
     </section>
   </div>
 
-  <!-- Modal de Edición -->
+  
 <div class="modal" id="modal-edicion">
   <div class="modal-content">
     <span class="close-modal">&times;</span>
@@ -1106,7 +1106,7 @@
     <form id="form-edicion">
       <div class="form-grid">
 
-        <!-- Campos que faltaban -->
+        
         <div class="form-group">
           <label for="edit-placa">Placa / Identificación</label>
           <input type="text" id="edit-placa" required>
@@ -1122,7 +1122,7 @@
           <input type="date" id="edit-fecha" required>
         </div>
 
-        <!-- Selects dinámicos -->
+        
         <div class="form-group">
           <label for="edit-tipo">Tipo de Equipo</label>
           <select id="edit-tipo" required></select>
@@ -1158,13 +1158,13 @@
           <select id="edit-ubicacion" required></select>
         </div>
 
-        <!-- Campos que ya estaban -->
+        
        <div class="form-group">
   <label for="edit-centro-costo">Centro de Costo</label>
   <input type="text" id="edit-centro-costo" name="centro_costo" required>
 </div>
 
-<!-- URL Ticket -->
+
 <div class="form-group">
   <label for="edit-url-ticket">URL del Ticket</label>
   <input type="url" id="edit-url-ticket" name="url_ticket">
@@ -1187,16 +1187,16 @@
 
 
  <script>
-   // Funciones
+  
 const API_BASE = "http://10.110.6.148/mantenimientos/";
 </script>
 
 
  <script>
-// ==== Config global ====
 
 
-// ==== Mapa de selects del modal ====
+
+
 const selectsEdicion = {
   'edit-tipo': 'listar_tipo_equipo.php',
   'edit-marca': 'listar_marcas.php',
@@ -1207,7 +1207,7 @@ const selectsEdicion = {
   'edit-ubicacion': 'listar_ubicaciones.php'
 };
 
-// ==== Helpers Choices ====
+
 function aplicarChoices(select) {
   if (!select.classList.contains('choices-initialized')) {
     new Choices(select, {
@@ -1221,7 +1221,7 @@ function aplicarChoices(select) {
   }
 }
 
-// ==== Cargar un select desde PHP y preseleccionar ====
+
 function cargarSelect(idSelect, endpoint, valorActual = '') {
   const select = document.getElementById(idSelect);
   if (!select) return Promise.resolve();
@@ -1234,12 +1234,12 @@ function cargarSelect(idSelect, endpoint, valorActual = '') {
       placeholder.disabled = true;
       select.appendChild(placeholder);
 
-      // Agregar todas las opciones del endpoint
+      
       (Array.isArray(data) ? data : []).forEach(item => {
         select.appendChild(new Option(item, item));
       });
 
-      // Si el valor actual no está en las opciones, lo inyectamos
+      
 function asegurarOpcion(select, valor) {
   if (!valor) return;
   const existe = [...select.options].some(o => o.value === valor);
@@ -1248,15 +1248,15 @@ function asegurarOpcion(select, valor) {
   }
 }
 
-      // Preseleccionar el valor actual si existe
+     
       if (valorActual) {
         select.value = valorActual;
       }
 
-      // Aplicar Choices DESPUÉS de seleccionar el valor
+      
       aplicarChoices(select);
 
-      // Si después de aplicar Choices no se muestra el valor, forzar la selección
+      
       if (valorActual && select.value !== valorActual) {
         select.value = valorActual;
       }
@@ -1264,7 +1264,7 @@ function asegurarOpcion(select, valor) {
     .catch(err => console.error(`❌ Error cargando ${idSelect}:`, err));
 }
 
-// ==== Cargar TODOS los selects del modal ====
+
 function cargarSelectsEdicion(valores = {}) {
   return Promise.all(
     Object.entries(selectsEdicion).map(([id, endpoint]) => {
@@ -1275,7 +1275,7 @@ function cargarSelectsEdicion(valores = {}) {
   );
 }
 
-// ==== Limpieza y normalización ====
+
 const clean = v => (v ?? '').toString().trim();
 
 function parseFechaUI(a) {
@@ -1294,12 +1294,12 @@ window.abrirModalEdicion = (r) => {
     serial: clean(r.serial),
     fecha: parseFechaUI(r.fecha),
 
-    // 🔧 normalización de nombres:
+    
     centro_costo: clean(r.centro_costo ?? r.centroCosto ?? ''),
     url_ticket:   clean(r.url_ticket   ?? r.urlTicket   ?? ''),
     observaciones: clean(r.observaciones),
 
-    // 🔧 muy importante para el select:
+    
     tipo_mantenimiento: clean(r.tipo_mantenimiento ?? r.tipoMantenimiento ?? '')
   };
 
@@ -1319,15 +1319,15 @@ window.abrirModalEdicion = (r) => {
 </script>
 
 
-  <!-- Script principal -->
+ 
   <script>
 
 
-  // Variables de estado
+ 
   let registros = [];
   let currentSection = 'registrar';
 
-  // Elementos del DOM
+  
   const loginContainer = document.getElementById('login');
   const appContainer = document.getElementById('app');
   const loginForm = document.getElementById('login-form');
@@ -1350,7 +1350,7 @@ window.abrirModalEdicion = (r) => {
   const enProgresoElement = document.getElementById('en-progreso');
   const finalizadosElement = document.getElementById('finalizados');
   const videoFondo = document.getElementById('video-fondo');
-  // 🔧 Abre el modal de edición usando el id del registro
+  
 window.editarRegistro = function (id) {
   const registro = registros.find(item => String(item.id) === String(id));
 
@@ -1361,15 +1361,15 @@ window.editarRegistro = function (id) {
   }
 
   console.log('Editando registro:', registro);
-  abrirModalEdicion(registro); // 👈 esta función ya la tienes definida más arriba
+  abrirModalEdicion(registro); 
 };
-// Convierte claves snake_case -> camelCase
+
 function toCamel(r) {
   if (!r || typeof r !== 'object') return r;
   const m = k => k.replace(/_([a-z])/g, (_,c) => c.toUpperCase());
   const out = {};
   for (const [k,v] of Object.entries(r)) out[m(k)] = v ?? '';
-  // sanea 0/null/"0"
+ 
   const clean = x => {
     const s = String(x ?? '').trim();
     return (s === '' || s === '0' || s.toLowerCase() === 'null') ? '' : s;
@@ -1381,7 +1381,7 @@ function toCamel(r) {
   return out;
 }
 
-// Convierte claves camelCase -> snake_case (para enviar)
+
 function toSnake(r) {
   const m = k => k.replace(/[A-Z]/g, c => '_' + c.toLowerCase());
   const out = {};
@@ -1396,23 +1396,22 @@ async function sincronizarRegistros() {
   try {
     const res = await fetch(API_BASE + "obtener_registros.php", {
       method: "GET",
-      credentials: "include",            // 1) Enviar cookie de sesión
+      credentials: "include",            
       headers: { "Accept": "application/json" },
-      signal: ctrl.signal                // 5) Timeout con AbortController
+      signal: ctrl.signal                
     });
 
     const ctype = res.headers.get("content-type") || "";
 
-    // 2) Manejo explícito de 401
+    
     if (res.status === 401) {
       console.warn("Sesión expirada o no iniciada (401).");
       alert("⚠️ Tu sesión expiró. Por favor inicia sesión de nuevo.");
-      // Opcional: redirigir al login
-      // window.location.href = "login.html";
+     
       return;
     }
 
-    // 3) Si no es OK, prepara un error con detalle del cuerpo
+   
     if (!res.ok) {
       let bodyText = "";
       try {
@@ -1423,12 +1422,12 @@ async function sincronizarRegistros() {
           bodyText = await res.text();
         }
       } catch (_) {
-        /* sin cuerpo útil */
+        
       }
       throw new Error(`HTTP ${res.status}${bodyText ? " - " + bodyText : ""}`);
     }
 
-    // 4) Parseo/normalización de datos
+    
     let payload = [];
     if (ctype.includes("application/json")) {
       payload = await res.json();
@@ -1436,15 +1435,15 @@ async function sincronizarRegistros() {
       payload = [];
     }
 
-    // Acepta tanto un array plano como { data: [...] }
+    
     const lista = Array.isArray(payload)
       ? payload
       : (Array.isArray(payload?.data) ? payload.data : []);
 
-    // toCamel sobre cada registro
+    
     registros = (lista || []).map(toCamel);
 
-    // Mantén tu flujo actual
+    
     if (currentSection === "registrar") {
       renderizarRegistros();
     } else {
@@ -1453,7 +1452,7 @@ async function sincronizarRegistros() {
     actualizarEstadisticas();
 
   } catch (err) {
-    // 6) Mensajes claros
+  
     if (err?.name === "AbortError") {
       console.error("Sincronización abortada por timeout:", err);
       alert("⏳ La solicitud tardó demasiado. Intenta de nuevo.");
@@ -1467,7 +1466,7 @@ async function sincronizarRegistros() {
 }
 
 
-    // Inicialización
+    
    document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-ejecutar-busqueda').addEventListener('click', () => {
     buscarRegistros();
@@ -1476,7 +1475,7 @@ async function sincronizarRegistros() {
   
 
 
-  // Mostrar video al inicio
+
   videoFondo.style.display = 'block';
 
   
@@ -1486,7 +1485,7 @@ if (isLoggedIn === 'true') {
   loginContainer.style.display = 'none';
   appContainer.style.display = 'block';
 
-  sincronizarRegistros(); // Primera sincronización al cargar
+  sincronizarRegistros(); 
 }
 
 
@@ -1495,7 +1494,7 @@ if (isLoggedIn === 'true') {
   document.getElementById('filtro-desde').value = today;
   document.getElementById('filtro-hasta').value = today;
 
-  // ✅ Sincronizar cada 30 segundos
+
   setInterval(sincronizarRegistros, 30000);
 });
 document.getElementById('filtrar-fechas').addEventListener('click', () => {
@@ -1503,7 +1502,7 @@ document.getElementById('filtrar-fechas').addEventListener('click', () => {
   buscarRegistros();
 });
 
-    // Event Listeners
+   
     loginForm.addEventListener('submit', handleLogin);
     btnRegistrar.addEventListener('click', () => cambiarSeccion('registrar'));
     btnBuscar.addEventListener('click', () => cambiarSeccion('buscar'));
@@ -1532,12 +1531,12 @@ fetch("http://10.110.6.148/mantenimientos/validar_login.php", {
   .then(res => res.json())
   .then(data => {
   if (data.success) {
-    // Si es ADMIN, ir directo al panel
+    
     if (data.role === 'admin') {
       window.location.href = "http://10.110.6.148/mantenimientos/ADMIN/panel_admin.php";
       return;
     }
-    // Usuario normal: mostrar la app
+    
     sessionStorage.setItem('isLoggedIn', 'true');
     loginContainer.style.display = 'none';
     appContainer.style.display = 'block';
@@ -1588,7 +1587,7 @@ fetch("http://10.110.6.148/mantenimientos/validar_login.php", {
 function agregarRegistro(e) {
   e.preventDefault();
 
-  // 🔒 Validaciones manuales para selects con Choices.js
+ 
   const camposValidar = [
     { id: 'tipo', nombre: 'Tipo de Equipo' },
     { id: 'marca', nombre: 'Marca' },
@@ -1738,7 +1737,7 @@ function agregarRegistro(e) {
         listaRegistros.appendChild(li);
       });
 
-      // Agregar event listeners a los botones de editar y eliminar
+     
       document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const id = e.target.getAttribute('data-id');
@@ -1810,7 +1809,7 @@ function agregarRegistro(e) {
       else if (label.includes('registrado')) fila['Registrado por'] = valor;
     });
 
-    // Obtener estado directamente desde la clase
+   
     fila['Estado'] = item.querySelector('.status-badge')?.textContent.trim() || '';
 
     datosExportar.push(fila);
@@ -1839,7 +1838,7 @@ function agregarRegistro(e) {
   const fechaRegistro = new Date(registro.fecha);
   const fechaDesde = new Date(desde);
   const fechaHasta = new Date(hasta);
-  fechaHasta.setDate(fechaHasta.getDate() + 1); // incluir todo el día
+  fechaHasta.setDate(fechaHasta.getDate() + 1); 
 
   const coincideFecha = fechaRegistro >= fechaDesde && fechaRegistro <= fechaHasta;
   return coincideTexto && coincideFecha;
@@ -1864,7 +1863,7 @@ aplicarFiltroFecha = false;
 
   const fechaDesde = new Date(desde);
   const fechaHasta = new Date(hasta);
-  fechaHasta.setDate(fechaHasta.getDate() + 1); // incluir todo el día
+  fechaHasta.setDate(fechaHasta.getDate() + 1); 
 
   const resultados = registros.filter(registro => {
     const coincideTexto =
@@ -1962,7 +1961,7 @@ aplicarFiltroFecha = false;
        verHistorial(id);
   });
 });
-      // Agregar event listeners a los botones de editar
+     
        document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const id = e.target.getAttribute('data-id');
@@ -2162,7 +2161,7 @@ function eliminarRegistro(id) {
     contenedor.innerHTML = '<p style="color: #666;">No hay mantenimientos anteriores para esta placa.</p>';
   } else {
 
-// Aquí esta las funciones que hace que quede horizonta y en forma
+
     historiales.forEach(item => {
       const statusClass =
         item.estado === 'Pendiente' ? 'status-pendiente' :
@@ -2307,7 +2306,7 @@ li.innerHTML = `
 
 
   resultadosBusqueda.appendChild(li);
-  // ... (después de resultados.forEach)
+ 
 document.querySelectorAll('.edit-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     const id = e.target.getAttribute('data-id');
@@ -2380,7 +2379,7 @@ function verEnProgreso() {
       </div>
     `;
     resultadosBusqueda.appendChild(li);
-    // ... (después de resultados.forEach)
+    
 document.querySelectorAll('.edit-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     const id = e.target.getAttribute('data-id');
@@ -2455,7 +2454,7 @@ function verFinalizados() {
       </div>
     `;
     resultadosBusqueda.appendChild(li);
-    // ... (después de resultados.forEach)
+    
 document.querySelectorAll('.edit-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     const id = e.target.getAttribute('data-id');
@@ -2483,7 +2482,7 @@ function verTodosLosRegistros() {
   modoPendientes = false;
   cambiarSeccion('buscar');
 
-  // Limpiar filtros
+  
   document.getElementById('buscar-input').value = '';
   document.getElementById('filtro-desde').value = '';
   document.getElementById('filtro-hasta').value = '';
@@ -2533,7 +2532,7 @@ function verTodosLosRegistros() {
     resultadosBusqueda.appendChild(li);
   });
 
-  // Reasignar listeners
+ 
   document.querySelectorAll('.edit-btn').forEach(btn => {
     btn.addEventListener('click', (e) => editarRegistro(e.target.dataset.id));
   });
@@ -2552,34 +2551,34 @@ function verTodosLosRegistros() {
   window.addEventListener('DOMContentLoaded', () => {
     const alerta = document.getElementById('alerta-sistema');
 
-    // Asegurarnos que esté visible al inicio
+    
     alerta.classList.remove('alerta-oculta');
     alerta.style.display = 'block';
 
-    // Función para alternar visibilidad
+    
     const cicloAlerta = () => {
-      // Mostrar alerta
+      
       alerta.classList.remove('alerta-oculta');
       alerta.classList.add('visible');
 
-      // Sonido opcional
+    
       const sonido = document.getElementById('error-sound');
       if (sonido) {
         sonido.currentTime = 0;
         sonido.play();
       }
 
-      // Después de 3 segundos, ocultar
+      
       setTimeout(() => {
         alerta.classList.remove('visible');
         alerta.classList.add('alerta-oculta');
 
-        // Después de 2 segundos más, volver a mostrar
+        
         setTimeout(cicloAlerta, 4000);
       }, 5000);
     };
 
-    // Inicia el ciclo
+   
     cicloAlerta();
   });
 </script>
@@ -2616,7 +2615,7 @@ function verTodosLosRegistros() {
   });
 </script>
 
-<!-- Modal de Historial -->
+
 <div class="modal" id="modal-historial">
   <div class="modal-content">
     <button class="close-modal-historial" aria-label="Cerrar">
@@ -2674,9 +2673,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 <script>
-// ===========================
-// Helpers de sesión (Front)
-// ===========================
+
 function guardarSesion({ usuario, role, sede_id, sede_nombre }) {
   sessionStorage.setItem("usuario", usuario || "");
   sessionStorage.setItem("role", (role || "").toLowerCase() === "admin" ? "admin" : "user");
@@ -2689,12 +2686,10 @@ function limpiarSesion() {
   sessionStorage.removeItem("role");
   sessionStorage.removeItem("sede_id");
   sessionStorage.removeItem("sede_nombre");
-  sessionStorage.removeItem("isLoggedIn"); // importante
+  sessionStorage.removeItem("isLoggedIn"); 
 }
 
-// ===========================
-// Video de fondo (Robusto)
-// ===========================
+
 function applyVideoBaseStyles(v) {
   if (!v) return;
   v.style.position  = "fixed";
@@ -2703,7 +2698,7 @@ function applyVideoBaseStyles(v) {
   v.style.width     = "100vw";
   v.style.height    = "100vh";
   v.style.objectFit = "cover";
-  v.style.zIndex    = "-1"; // SIEMPRE al fondo
+  v.style.zIndex    = "-1"; 
 }
 
 function resurrectVideoIfMissing() {
@@ -2748,9 +2743,7 @@ function hideVideoBackground() {
   v.style.display = "none";
 }
 
-// ===========================
-// Badge de sede
-// ===========================
+
 function setBadgeSede({ role, sedeNombre }) {
   const badge = document.getElementById("nombreSede");
   if (!badge) return;
@@ -2778,35 +2771,31 @@ function renderSedeDesdeSesion() {
   });
 }
 
-// ===========================
-// Vistas (login / app)
-// ===========================
+
 function mostrarApp() {
   document.getElementById("login")?.classList.add("oculto");
   document.getElementById("app")?.classList.remove("oculto");
-  // al estar dentro de la app, ocultamos el video
+  
   hideVideoBackground();
 }
 
 function mostrarLogin() {
   document.getElementById("app")?.classList.add("oculto");
   document.getElementById("login")?.classList.remove("oculto");
-  // asegurar que el video exista y se vea
+  
   showVideoBackground();
 }
 
-// ===========================
-// INIT
-// ===========================
+
 document.addEventListener("DOMContentLoaded", () => {
-  // 1) Asegura que el video exista y tenga estilos base al cargar
+ 
   const v0 = resurrectVideoIfMissing();
   applyVideoBaseStyles(v0);
 
-  // 2) Detecta si vienes del servidor con ?logout=1 (desde logout.php)
+  
   const qs = new URLSearchParams(location.search);
   if (qs.has("logout")) {
-    // limpieza del front y forzar vista de login + video
+    
     limpiarSesion();
     showVideoBackground();
 
@@ -2815,11 +2804,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (app)   { app.classList.add("oculto"); app.style.display = "none"; }
     if (login) { login.classList.remove("oculto"); login.style.display = "flex"; }
 
-    // quitar el parámetro para que no se repita
+    
     history.replaceState({}, "", location.pathname);
   }
 
-  // 3) Estado inicial normal
+  
   if (sessionStorage.getItem("usuario")) {
     mostrarApp();
     renderSedeDesdeSesion();
@@ -2827,7 +2816,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mostrarLogin();
   }
 
-  // 4) Login normal (validar_login.php)
+ 
   const form = document.getElementById("login-form");
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -2856,7 +2845,7 @@ document.addEventListener("DOMContentLoaded", () => {
           sede_nombre: sede_nombre_calc
         });
 
-        // Nota: si es admin y rediriges al panel, tu backend lo maneja.
+     
         mostrarApp();
         setBadgeSede({ role, sedeNombre: sede_nombre_calc });
       } else {
@@ -2871,12 +2860,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 5) Logout desde el index -> usa logout.php (servidor) y vuelve con ?logout=1
+  
   document.getElementById("btn-logout")?.addEventListener("click", () => {
     window.location.href = "logout.php";
   });
 
-  // 6) Si vuelves al tab y no hay sesión, reintenta mostrar el video (autoplay)
+  
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && !sessionStorage.getItem("usuario")) {
       showVideoBackground();

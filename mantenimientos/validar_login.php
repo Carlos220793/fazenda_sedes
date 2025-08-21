@@ -14,9 +14,7 @@ $input = json_decode(file_get_contents("php://input"), true) ?? [];
 $u = $input["usuario"] ?? "";
 $c = $input["clave"]   ?? "";
 
-/** ---------------------------------------------
- *  ADD: Helper para obtener el nombre de la sede
- * --------------------------------------------- */
+
 function getSedeNombre(?mysqli $cn, $sedeId) {
   if (!$cn || !$sedeId) return null;
   if (!is_numeric($sedeId)) return null;
@@ -30,9 +28,7 @@ function getSedeNombre(?mysqli $cn, $sedeId) {
   return $row["nombre"] ?? null;
 }
 
-/** ----------------------------------------------------
- *  Caso 1: Admin hardcodeado (sin sede → Meta_Fincas)
- * ---------------------------------------------------- */
+
 if ($u === $usuarioAdmin && $c === $claveAdmin) {
   $_SESSION = [];
   session_regenerate_id(true);
@@ -41,7 +37,7 @@ if ($u === $usuarioAdmin && $c === $claveAdmin) {
   $_SESSION["rol"]         = "admin";
   unset($_SESSION["sede_id"]);
 
-  // ADD: sede_nombre fijo para admin sin sede
+  
   $sedeNombre = "Regional Meta_Fincas";
 
   echo json_encode([
@@ -53,9 +49,7 @@ if ($u === $usuarioAdmin && $c === $claveAdmin) {
   exit;
 }
 
-/** ------------------------------------------------------------
- *  Caso 2: Usuario hardcodeado "Administrador" (sede_id = 5)
- * ------------------------------------------------------------ */
+
 if ($u === $usuarioMeta && $c === $claveMeta) {
   $_SESSION = [];
   session_regenerate_id(true);
@@ -64,9 +58,9 @@ if ($u === $usuarioMeta && $c === $claveMeta) {
   $_SESSION["rol"]     = "user";
   $_SESSION["sede_id"] = 5;
 
-  // ADD: Intentar traer nombre de la sede (id=5)
+ 
   $sedeNombre = null;
-  // Como aún no hay conexión abierta, abrimos una temporal solo para el nombre
+  
   $tmp = @new mysqli("10.110.6.148", "BaseDatos", "sysadm1n2207", "mantenimientos");
   if (!$tmp->connect_error) {
     $tmp->set_charset("utf8mb4");
@@ -78,14 +72,12 @@ if ($u === $usuarioMeta && $c === $claveMeta) {
     "success"      => true,
     "role"         => "user",
     "sede_id"      => 5,
-    "sede_nombre"  => $sedeNombre   // ADD
+    "sede_nombre"  => $sedeNombre   
   ]);
   exit;
 }
 
-/** ------------------------------------------------------------
- *  Caso 3: Usuarios desde base de datos
- * ------------------------------------------------------------ */
+
 $cn = @new mysqli("10.110.6.148", "BaseDatos", "sysadm1n2207", "mantenimientos");
 if (!$cn->connect_error) {
   $cn->set_charset("utf8mb4");
@@ -108,7 +100,7 @@ if (!$cn->connect_error) {
       $_SESSION["usuario_id"]  = (int)$user["id_usuario"];
       $_SESSION["usuario"]     = $user["usuario"];
 
-      // ADD: preparar sede_id y sede_nombre
+      
       $sedeId = isset($user["id_sede"]) ? (int)$user["id_sede"] : null;
       $sedeNombre = null;
 
@@ -117,7 +109,7 @@ if (!$cn->connect_error) {
         $_SESSION["rol"]   = "admin";
         unset($_SESSION["sede_id"]);
 
-        // ADD: admin sin sede → Meta_Fincas
+        
         $sedeNombre = "Regional Meta_Fincas";
 
         echo json_encode([
@@ -131,7 +123,7 @@ if (!$cn->connect_error) {
         $_SESSION["rol"]     = "user";
         $_SESSION["sede_id"] = $sedeId;
 
-        // ADD: buscar nombre de sede en tabla sedes (si hay sede_id)
+       
         if (!empty($sedeId)) {
           $sedeNombre = getSedeNombre($cn, $sedeId);
         }
@@ -150,9 +142,7 @@ if (!$cn->connect_error) {
   $cn->close();
 }
 
-/** ------------------------------------------------------------
- *  Credenciales inválidas
- * ------------------------------------------------------------ */
+
 $_SESSION = [];
 session_destroy();
 http_response_code(401);

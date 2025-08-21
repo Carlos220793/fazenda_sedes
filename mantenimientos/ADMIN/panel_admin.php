@@ -28,15 +28,31 @@ $tablas = [
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Panel Administrador</title>
+
+  <!-- Tipografía moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --bg:#f5f7fa; --card:#fff; --ink:#1f2937; --muted:#6b7280;
       --primary:#1976d2; --primary-600:#1565c0;
       --danger:#d32f2f; --danger-600:#b71c1c; --border:#e5e7eb;
+
+      /* Nuevas vars para look pro */
+      --card-radius: 14px;
+      --shadow-sm: 0 4px 10px rgba(2, 6, 23, .06);
+      --shadow-md: 0 10px 24px rgba(2, 6, 23, .08);
+      --ink-2: #0f172a;
+      --muted-2:#64748b;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0; background:var(--bg); color:var(--ink); font-family:Arial, Helvetica, sans-serif; font-size:14px;}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size:14px;
+    }
 
     /* Contenedor centrado */
     .container{
@@ -49,9 +65,7 @@ $tablas = [
       box-shadow: 0 8px 20px rgba(15,23,42,.06);
     }
 
-    h1{
-      text-align:center; margin: 0 0 16px; font-size:20px;
-    }
+    h1{ text-align:center; margin: 0 0 16px; font-size:20px; }
     .sub{ text-align:center; color:var(--muted); margin:0 0 18px; font-size:12px;}
 
     /* Alerta */
@@ -68,7 +82,9 @@ $tablas = [
     .inline-form{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px }
     .input{
       height:32px; padding:0 10px; border:1px solid #d1d5db; border-radius:8px; font-size:13px; min-width:220px;
+      transition: box-shadow .2s ease, border-color .2s ease;
     }
+    .input:focus{ outline:none; border-color:#b7cdf6; box-shadow:0 0 0 3px rgba(59,130,246,.15); }
     .btn{
       height:32px; padding:0 10px; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:.2s;
     }
@@ -103,73 +119,132 @@ $tablas = [
       .acciones input[type="text"]{ width:160px }
     }
     /* Más espacio real para la última columna */
-td.acciones { width: 460px !important; }
+    td.acciones { width: 460px !important; }
 
-/* Acomodo de acciones: en fila, con espacio y sin que se aplasten */
-.acciones{
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: flex-start;
-  white-space: nowrap;           /* que no salten de línea */
-}
-.acciones form{ margin: 0; }     /* quitamos márgenes extra */
-.acciones .btn{
-  min-width: 74px;               /* evita que se achiquen */
-  text-align: center;
-}
+    /* Acomodo de acciones: en fila, con espacio y sin que se aplasten */
+    .acciones{ display: flex; gap: 10px; align-items: center; justify-content: flex-start; white-space: nowrap; }
+    .acciones form{ margin: 0; }
+    .acciones .btn{ min-width: 74px; text-align: center; }
 
-/* Un pequeño colchón a la derecha para que no “toque” el borde */
-.table-wrap{ padding-right: 8px; }
-.titulo-admin {
-  font-size: 38px;
-  font-weight: 700;
-  text-align: center;
-  color: #1976d2;
-  margin-bottom: 5px;
-  animation: aparecer 1s ease-out forwards, brillo 3s linear infinite;
-}
+    .table-wrap{ padding-right: 8px; }
+    .titulo-admin {
+      font-size: 38px; font-weight: 700; text-align: center; color: #1976d2; margin-bottom: 5px;
+      animation: aparecer 1s ease-out forwards, brillo 3s linear infinite;
+    }
+    .subtitulo-admin {
+      font-size: 14px; text-align: center; color: #555; margin-bottom: 25px; opacity: 0;
+      animation: aparecer 1s ease-out forwards; animation-delay: 0.4s;
+    }
+    @keyframes aparecer { 0%{opacity:0;transform:translateY(15px)} 100%{opacity:1;transform:translateY(0)} }
+    @keyframes brillo   { 0%,100%{text-shadow:0 0 5px #90caf9,0 0 10px #64b5f6} 50%{text-shadow:0 0 15px #64b5f6,0 0 25px #42a5f5} }
 
-.subtitulo-admin {
-  font-size: 14px;
-  text-align: center;
-  color: #555;
-  margin-bottom: 25px;
-  opacity: 0;
-  animation: aparecer 1s ease-out forwards;
-  animation-delay: 0.4s;
-}
+    /* ======= ESTILOS DEL DASHBOARD (Mejorados) ======= */
+    .dash-card{
+      background: linear-gradient(180deg,#ffffff,#fbfcff);
+      border:1px solid var(--border); border-radius:var(--card-radius);
+      padding:14px; box-shadow:var(--shadow-sm);
+    }
+    .filters-row{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px; align-items:center; }
+    .filters-row .input, .filters-row select{
+      height:36px; border-radius:10px; border:1px solid #d7dbe3; padding:0 12px; background:#fff; color:var(--ink);
+      transition: box-shadow .2s ease, border-color .2s ease;
+    }
+    #btn-aplicar{ height:36px; border-radius:10px; padding:0 14px; box-shadow:var(--shadow-sm); }
+    #btn-aplicar:hover{ box-shadow:var(--shadow-md); }
 
-/* Animación de aparición suave */
-@keyframes aparecer {
-  0% {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    .kpis-row{ display:grid; grid-template-columns:repeat(3,minmax(220px,1fr)); gap:12px; margin-bottom:12px; }
+    .kpi-card{ display:grid; grid-template-rows:auto 1fr; gap:6px; }
+    .kpi-card:hover{ box-shadow:var(--shadow-md); transition:box-shadow .25s ease; }
+    .kpi-card b{ color:var(--muted-2); font-weight:600; letter-spacing:.2px; }
+    .kpi-value{ font-size:28px; font-weight:800; color:var(--ink-2); }
 
-/* Animación de brillo */
-@keyframes brillo {
-  0%, 100% {
-    text-shadow: 0 0 5px #90caf9, 0 0 10px #64b5f6;
-  }
-  50% {
-    text-shadow: 0 0 15px #64b5f6, 0 0 25px #42a5f5;
-  }
-}
+    .chart-box{ height:320px; padding:6px 6px 0 6px; }
 
+    /* Tabla del dashboard con mejor contraste */
+    #tabla-sedes-dash{ border-collapse: separate; border-spacing: 0; }
+    #tabla-sedes-dash thead th{
+      background:#f6f8fb; color:#334155; border-bottom:1px solid #e6eaf2;
+    }
+    #tabla-sedes-dash tbody tr td{ border-bottom:1px dashed #eaeef6; }
+    #tabla-sedes-dash tbody tr:hover td{ background:#f9fbff; }
+    #tabla-sedes-dash td:nth-child(n+2){ text-align: right; } /* números alineados */
   </style>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <a href="../logout.php" class="btn-logout">🚪 Cerrar sesión</a>
 
   <div class="container">
     <h1 class="titulo-admin">Panel Administrator📊</h1>
-<p class="subtitulo-admin">⚙️Gestiona o modifica los valores que usa en el formulario principal</p>
+    <p class="subtitulo-admin">⚙️Gestiona o modifica los valores que usa en el formulario principal</p>
+
+    <!-- ========== DASHBOARD DE SEDES ========== -->
+    <section class="dash-card" id="dash-sedes">
+      <!-- Filtros -->
+      <div class="filters-row">
+        <input type="date" id="filtro-from" class="input">
+        <input type="date" id="filtro-to" class="input">
+
+        <select id="filtro-type" class="input">
+          <option value="all">Todos los tipos</option>
+          <option value="Preventivo">Preventivo</option>
+          <option value="Correctivo">Correctivo</option>
+        </select>
+
+        <select id="filtro-status" class="input">
+          <option value="all">Todos</option>
+          <option value="abierto">Abierto (Pendiente + En progreso)</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="en_progreso">En progreso</option>
+          <option value="finalizado">Finalizado</option>
+          <option value="cerrado">Cerrado (Finalizado)</option>
+        </select>
+
+        <button class="btn primary" id="btn-aplicar">Aplicar</button>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpis-row">
+        <div class="kpi-card dash-card">
+          <b>Total Global</b>
+          <div class="kpi-value" id="kpi-total">0</div>
+        </div>
+        <div class="kpi-card dash-card">
+          <b>Sede Líder</b>
+          <div class="kpi-value" id="kpi-lider">-</div>
+        </div>
+        <div class="kpi-card dash-card">
+          <b>Brecha vs 2°</b>
+          <div class="kpi-value" id="kpi-brecha">0</div>
+        </div>
+      </div>
+
+      <!-- Gráfico -->
+      <div class="dash-card chart-box">
+        <canvas id="grafico-sedes"></canvas>
+      </div>
+
+      <!-- Tabla por sede (desglose completo) -->
+      <div class="table-wrap" style="margin-top:12px">
+        <table id="tabla-sedes-dash">
+          <thead>
+            <tr>
+              <th>Sede</th>
+              <th style="width:90px">Pend.</th>
+              <th style="width:90px">En prog.</th>
+              <th style="width:90px">Final.</th>
+              <th style="width:90px">Abiertos</th>
+              <th style="width:90px">Total</th>
+              <th style="width:110px">% Cierre</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+    <!-- ========== FIN DASHBOARD ========== -->
 
     <?php
       $mensaje = $_GET['msg'] ?? '';
@@ -218,7 +293,6 @@ td.acciones { width: 460px !important; }
               <th style="width:80px">ID</th>
               <th>Nombre</th>
               <th style="width:460px">Acciones</th>
-
             </tr>
             <?php
               $res = $conexion->query("SELECT * FROM $tabla ORDER BY nombre");
@@ -258,5 +332,99 @@ td.acciones { width: 460px !important; }
       </script>
     <?php endif; ?>
   </div>
+
+  <script>
+    // ===== Dashboard por sedes =====
+    let chartSedes = null;
+
+    function cargarKpisSedes() {
+      const from   = document.getElementById("filtro-from").value;
+      const to     = document.getElementById("filtro-to").value;
+      const type   = document.getElementById("filtro-type").value;
+      const status = document.getElementById("filtro-status").value;
+
+      const qs = new URLSearchParams({from, to, type, status}).toString();
+
+      // Endpoint en la raíz del proyecto
+      fetch("../admin_kpis_sedes.php?" + qs, { credentials: "same-origin" })
+        .then(r => r.json())
+        .then(data => {
+          if (!data.ok) { console.error(data); alert(data.error || "Error"); return; }
+
+          // KPIs
+          document.getElementById("kpi-total").textContent  = data.resumen.total_global ?? 0;
+          document.getElementById("kpi-lider").textContent  =
+            data.resumen.sede_lider ? `${data.resumen.sede_lider.nombre} (${data.resumen.sede_lider.total})` : "-";
+          document.getElementById("kpi-brecha").textContent = data.resumen.brecha_vs_segundo ?? 0;
+
+          // Tabla (desglose)
+          const tbody = document.querySelector("#tabla-sedes-dash tbody");
+          tbody.innerHTML = "";
+          (data.por_sede || []).forEach(s => {
+            const abiertos = (s.abiertos ?? (s.pendientes + s.en_progreso));
+            const pct = s.total ? ((s.finalizados / s.total) * 100).toFixed(1) : "0.0";
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${s.nombre}</td>
+              <td>${s.pendientes}</td>
+              <td>${s.en_progreso}</td>
+              <td>${s.finalizados}</td>
+              <td>${abiertos}</td>
+              <td>${s.total}</td>
+              <td>${pct}%</td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          // ===== Gráfico por total (look pro: gradiente + radios) =====
+          const labels = (data.por_sede || []).map(s => s.nombre);
+          const values = (data.por_sede || []).map(s => s.total);
+          const ctx = document.getElementById("grafico-sedes").getContext("2d");
+
+          // Gradiente suave
+          const grad = ctx.createLinearGradient(0, 0, 0, 320);
+          grad.addColorStop(0,   "rgba(25,118,210,0.85)");
+          grad.addColorStop(1.0, "rgba(25,118,210,0.25)");
+
+          if (chartSedes) chartSedes.destroy();
+          chartSedes = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels,
+              datasets: [{
+                label: "Mantenimientos",
+                data: values,
+                backgroundColor: grad,
+                borderColor: "rgba(25,118,210,.9)",
+                borderWidth: 1,
+                borderRadius: 10,
+                barThickness: 26,
+                hoverBackgroundColor: "rgba(25,118,210,0.95)"
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              animation: { duration: 600, easing: "easeOutCubic" },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: "#0f172a", titleColor: "#fff", bodyColor: "#e2e8f0",
+                  padding: 10, displayColors: false
+                }
+              },
+              scales: {
+                x: { grid: { display: false }, ticks: { color: "#334155", font: { weight: 600 } } },
+                y: { beginAtZero: true, grid: { color: "rgba(226,232,240,.6)", drawBorder: false }, ticks: { color: "#64748b" } }
+              }
+            }
+          });
+        })
+        .catch(err => { console.error(err); alert("Error al cargar KPIs"); });
+    }
+
+    document.getElementById("btn-aplicar").addEventListener("click", cargarKpisSedes);
+    document.addEventListener("DOMContentLoaded", cargarKpisSedes);
+  </script>
 </body>
 </html>
