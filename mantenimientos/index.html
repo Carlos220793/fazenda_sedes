@@ -930,7 +930,7 @@
       <input type="password" id="clave" placeholder="Contraseña" required>
       <button type="submit">Iniciar Sesión</button>
 <p class="alerta-sistema" id="alerta-sistema">
-  ⚠️ Esta página está siendo supervisada.
+  ⚠️ Esta página está siendo supervisada por los administradores del sistema.
 </p>
 
     <p id="error-login" class="error-login oculto"></p>
@@ -1144,9 +1144,9 @@
         </div>
 
         <div class="form-group">
-  <label for="edit-tipo-mantenimiento">Tipo de Mantenimiento</label>
-  <select id="edit-tipo-mantenimiento" name="tipo_mantenimiento" required></select>
-</div>
+          <label for="edit-tipo-mantenimiento">Tipo de Mantenimiento</label>
+         <select id="edit-tipo-mantenimiento" name="tipo_mantenimiento" required></select>
+           </div>
 
         <div class="form-group">
           <label for="edit-estado">Estado</label>
@@ -1718,10 +1718,10 @@ function agregarRegistro(e) {
               <div class="detail-value">${registro.centroCosto}</div>
             </div>
            ${registro.urlTicket && registro.urlTicket.trim() !== '' ? `
-  <div class="detail-item">
-    <div class="detail-label">Ticket</div>
-    <div class="detail-value"><a href="${registro.urlTicket}" target="_blank">📎Ver ticket</a></div>
-  </div>` : ''}
+             <div class="detail-item">
+             <div class="detail-label">Ticket</div>
+              <div class="detail-value"><a href="${registro.urlTicket}" target="_blank">📎Ver ticket</a></div>
+              </div>` : ''}
             <div class="detail-item">
               <div class="detail-label">Registrado por</div>
               <div class="detail-value">${registro.usuarioRegistro || 'Sistema'}</div>
@@ -1899,53 +1899,53 @@ aplicarFiltroFecha = false;
               <button class="edit-btn" data-id="${registro.id}">Editar</button>
               <button class="delete-btn" data-id="${registro.id}">Eliminar</button>
               <button class="history-btn" data-id="${registro.id}">Ver Historial</button>
-            </div>
-          </div>
-          <div class="registro-details">
+                   </div>
+                    </div>
+                     <div class="registro-details">
+                  <div class="detail-item">
+                <div class="detail-label">Tipo de Equipo</div>
+               <div class="detail-value">${registro.tipo}</div>
+             </div>
             <div class="detail-item">
-              <div class="detail-label">Tipo de Equipo</div>
-              <div class="detail-value">${registro.tipo}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">Marca</div>
-              <div class="detail-value">${registro.marca}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">Modelo</div>
-              <div class="detail-value">${registro.modelo}</div>
-            </div>
-            <div class="detail-item">
+             <div class="detail-label">Marca</div>
+                <div class="detail-value">${registro.marca}</div>
+                 </div>
+                  <div class="detail-item">
+                   <div class="detail-label">Modelo</div>
+                    <div class="detail-value">${registro.modelo}</div>
+                 </div>
+                <div class="detail-item">
               <div class="detail-label">Placa/Identificacion</div>
-              <div class="detail-value">${registro.placa}</div>
-            </div>
+            <div class="detail-value">${registro.placa}</div>
+          </div>
+        <div class="detail-item">
+       <div class="detail-label">Serial</div>
+         <div class="detail-value">${registro.serial}</div>
+          </div>
             <div class="detail-item">
-              <div class="detail-label">Serial</div>
-              <div class="detail-value">${registro.serial}</div>
-            </div>
-            <div class="detail-item">
-              <div class="detail-label">Fecha</div>
+             <div class="detail-label">Fecha</div>
               <div class="detail-value">${formatDate(registro.fecha)}</div>
-            </div>
+                </div>
+              <div class="detail-item">
+            <div class="detail-label">Técnico</div>
+            <div class="detail-value">${registro.tecnico}</div>
+          </div> 
+        <div class="detail-item">
+      <div class="detail-label">Ubicación</div>
+        <div class="detail-value">${registro.ubicacion}</div>
+         </div>
+           <div class="detail-item">
+            <div class="detail-label">Centro de Costo</div>
+              <div class="detail-value">${registro.centroCosto}</div>
+             </div>
             <div class="detail-item">
-              <div class="detail-label">Técnico</div>
-              <div class="detail-value">${registro.tecnico}</div>
-             </div> 
-        <div class="detail-item">
-          <div class="detail-label">Ubicación</div>
-          <div class="detail-value">${registro.ubicacion}</div>
-        </div>
-        <div class="detail-item">
-          <div class="detail-label">Centro de Costo</div>
-          <div class="detail-value">${registro.centroCosto}</div>
-        </div>
-        <div class="detail-item">
           <div class="detail-label">Observaciones</div>
-          <div class="detail-value">${registro.observaciones || ''}</div>
+        <div class="detail-value">${registro.observaciones || ''}</div>
         </div>
         ${registro.urlTicket ? `<div class="detail-item">
-  <div class="detail-label">Ticket</div>
-  <div class="detail-value"><a href="${registro.urlTicket}" target="_blank">📎Ver ticket</a></div>
-</div>` : ''}
+        <div class="detail-label">Ticket</div>
+         <div class="detail-value"><a href="${registro.urlTicket}" target="_blank">📎Ver ticket</a></div>
+          </div>` : ''}
             <div class="detail-item">
               <div class="detail-label">Registrado por</div>
               <div class="detail-value">${registro.usuarioRegistro || 'Sistema'}</div>
@@ -2142,113 +2142,96 @@ function eliminarRegistro(id) {
       }
     });
 
-      function verHistorial(id) {
-  const registro = registros.find(r => r.id === id);
-  if (!registro) return;
+     function verHistorial(id) {
+  // Busca el registro por ID ignorando tipos (string/number)
+  const registro = registros.find(r => String(r.id) === String(id));
+  if (!registro) {
+    alert('⚠️ No se encontró el registro para mostrar historial.');
+    return;
+  }
 
-  alert(`Historial del equipo con placa: ${registro.placa}`);
- 
-  
-  const placaBuscada = registro.placa;
-  const historiales = registros
-    .filter(r => r.placa === placaBuscada)
-    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  const placaBuscada = (registro.placa || '').trim();
+  if (!placaBuscada) {
+    alert('⚠️ Este registro no tiene placa. No es posible construir historial.');
+    return;
+  }
+
+  // Filtra por la misma placa y ordena por fecha DESC
+  const historiales = (registros || [])
+    .filter(r => (r.placa || '').trim() === placaBuscada)
+    .sort((a, b) => new Date(b.fecha || 0) - new Date(a.fecha || 0));
 
   const contenedor = document.getElementById('historial-contenido');
+  if (!contenedor) {
+    console.error('❌ No existe el contenedor #historial-contenido en el DOM.');
+    return;
+  }
+
   contenedor.innerHTML = '';
 
   if (historiales.length === 0) {
-    contenedor.innerHTML = '<p style="color: #666;">No hay mantenimientos anteriores para esta placa.</p>';
+    contenedor.innerHTML = '<p style="color:#666;">No hay mantenimientos anteriores para esta placa.</p>';
   } else {
-
-
     historiales.forEach(item => {
       const statusClass =
-        item.estado === 'Pendiente' ? 'status-pendiente' :
-        item.estado === 'En progreso' ? 'status-progreso' :
-        item.estado === 'Finalizado' ? 'status-finalizado' : '';
+        item.estado === 'Pendiente'   ? 'status-pendiente' :
+        item.estado === 'En progreso' ? 'status-progreso'  :
+        item.estado === 'Finalizado'  ? 'status-finalizado': '';
+
+      const tipo            = item.tipo || '';
+      const marca           = item.marca || '';
+      const modelo          = item.modelo || '';
+      const placa           = item.placa || '';
+      const serial          = item.serial || '';
+      const fecha           = item.fecha ? formatDate(item.fecha) : '';
+      const tecnico         = item.tecnico || '';
+      const tipoMant        = item.tipoMantenimiento || item.tipo_mantenimiento || '';
+      const ubicacion       = item.ubicacion || '';
+      const centroCosto     = item.centroCosto || item.centro_costo || '';
+      const observaciones   = item.observaciones || 'N/A';
+      const usuarioRegistro = item.usuarioRegistro || 'Sistema';
 
       const div = document.createElement('div');
       div.className = 'registro-item';
       div.innerHTML = `
         <div class="registro-header">
-          <div class="registro-title">${item.tipo} - ${item.placa}</div>
+          <div class="registro-title">${tipo} - ${placa}</div>
           <div class="registro-actions">
-            <span class="status-badge ${statusClass}">${item.estado}</span>
+            <span class="status-badge ${statusClass}">${item.estado || ''}</span>
           </div>
         </div>
         <div class="registro-details">
-          <div class="detail-item">
-            <div class="detail-label">Tipo de Equipo</div>
-            <div class="detail-value">${item.tipo}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Marca</div>
-            <div class="detail-value">${item.marca}</div>
-          </div>
-          <div class="detail-item">
-              <div class="detail-label">Modelo</div>
-              <div class="detail-value">${registro.modelo}</div>
-            </div>
-          <div class="detail-item">
-            <div class="detail-label">Placa/Identificación</div>
-            <div class="detail-value">${item.placa}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Serial</div>
-            <div class="detail-value">${item.serial}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Fecha</div>
-            <div class="detail-value">${formatDate(item.fecha)}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Técnico</div>
-            <div class="detail-value">${item.tecnico}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Tipo Mantenimiento</div>
-            <div class="detail-value">${item.tipoMantenimiento}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Ubicación</div>
-            <div class="detail-value">${item.ubicacion}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Centro de Costo</div>
-            <div class="detail-value">${item.centroCosto}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Observaciones</div>
-            <div class="detail-value">${item.observaciones || 'N/A'}</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">Registrado por</div>
-            <div class="detail-value">${item.usuarioRegistro || 'Sistema'}</div>
-          </div>
+          <div class="detail-item"><div class="detail-label">Tipo de Equipo</div><div class="detail-value">${tipo}</div></div>
+          <div class="detail-item"><div class="detail-label">Marca</div><div class="detail-value">${marca}</div></div>
+          <div class="detail-item"><div class="detail-label">Modelo</div><div class="detail-value">${modelo}</div></div>
+          <div class="detail-item"><div class="detail-label">Placa/Identificación</div><div class="detail-value">${placa}</div></div>
+          <div class="detail-item"><div class="detail-label">Serial</div><div class="detail-value">${serial}</div></div>
+          <div class="detail-item"><div class="detail-label">Fecha</div><div class="detail-value">${fecha}</div></div>
+          <div class="detail-item"><div class="detail-label">Técnico</div><div class="detail-value">${tecnico}</div></div>
+          <div class="detail-item"><div class="detail-label">Tipo Mantenimiento</div><div class="detail-value">${tipoMant}</div></div>
+          <div class="detail-item"><div class="detail-label">Ubicación</div><div class="detail-value">${ubicacion}</div></div>
+          <div class="detail-item"><div class="detail-label">Centro de Costo</div><div class="detail-value">${centroCosto}</div></div>
+          <div class="detail-item"><div class="detail-label">Observaciones</div><div class="detail-value">${observaciones}</div></div>
+          <div class="detail-item"><div class="detail-label">Registrado por</div><div class="detail-value">${usuarioRegistro}</div></div>
         </div>
       `;
       contenedor.appendChild(div);
     });
   }
 
-  document.getElementById('modal-historial').classList.add('active');
+  // Abre el modal
+  const modal = document.getElementById('modal-historial');
+  if (modal) modal.classList.add('active');
 }
-document.addEventListener('DOMContentLoaded', () => {
-  const cerrarHistorialBtn = document.querySelector('.close-modal-historial');
-  if (cerrarHistorialBtn) {
-    cerrarHistorialBtn.addEventListener('click', () => {
-      document.getElementById('modal-historial').classList.remove('active');
-    });
-  }
-});
+
+// (opcional) expórtala global
+window.verHistorial = verHistorial;
+function cerrarModalHistorial() {
+  const modal = document.getElementById('modal-historial');
+  if (modal) modal.classList.remove('active');
+}
 
 
-window.addEventListener('click', (e) => {
-  if (e.target === document.getElementById('modal-historial')) {
-    document.getElementById('modal-historial').classList.remove('active');
-  }
-});
 let modoPendientes = false; 
 let aplicarFiltroFecha = false;
 
@@ -2618,16 +2601,16 @@ function verTodosLosRegistros() {
 
 <div class="modal" id="modal-historial">
   <div class="modal-content">
-    <button class="close-modal-historial" aria-label="Cerrar">
+    <button type="button" class="close-modal-historial" aria-label="Cerrar">
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="12" fill="#e74c3c"/>
     <path d="M15 9l-6 6M9 9l6 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
   </svg>
 </button>
-    <h3>Historial de Mantenimientos</h3>
-    <div id="historial-contenido"></div>
-  </div>
-</div>
+
+  
+
+<div id="historial-contenido"></div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -2874,6 +2857,52 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script>
+// Cerrar modal de historial de forma centralizada
+function cerrarModalHistorial() {
+  const modal = document.getElementById('modal-historial');
+  if (modal) modal.classList.remove('active');
+}
+
+// 1) Click en el botón rojo ❌ dentro del modal
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.close-modal-historial')) {
+    e.preventDefault();
+    cerrarModalHistorial();
+  }
+});
+
+// 2) Click en el overlay (fuera del .modal-content)
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('modal-historial');
+  if (!modal) return;
+  if (modal.classList.contains('active') && e.target === modal) {
+    cerrarModalHistorial();
+  }
+});
+
+// 3) Tecla ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') cerrarModalHistorial();
+});
+
+// 4) Botón "Salir" dentro del modal (evita overlay sobre el botón global)
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'logout-desde-historial') {
+    // Cierra el modal
+    cerrarModalHistorial();
+
+    // Reutiliza tu flujo actual de logout
+    const logoutBtn = document.getElementById('btn-logout');
+    if (logoutBtn) {
+      logoutBtn.click(); // usa el listener ya configurado en tu app
+    } else {
+      // Fallback por si no existe el botón
+      window.location.href = "logout.php";
+    }
+  }
+});
+</script>
 
 
 

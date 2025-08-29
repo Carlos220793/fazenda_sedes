@@ -8,7 +8,7 @@ $usuarioAdmin = "Administrator";
 $claveAdmin   = "Adm1n#2025";
 
 $usuarioMeta  = "Administrador";
-$claveMeta    = "sysadm1n";
+$claveMeta    = "Finca_FZ2025";
 
 $input = json_decode(file_get_contents("php://input"), true) ?? [];
 $u = $input["usuario"] ?? "";

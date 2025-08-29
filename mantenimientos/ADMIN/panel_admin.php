@@ -5,13 +5,13 @@ if (empty($_SESSION['admin'])) {
   exit;
 }
 
-// Conexión
+
 $conexion = new mysqli("10.110.6.148", "BaseDatos", "sysadm1n2207", "mantenimientos");
 if ($conexion->connect_error) {
   die("❌ Error de conexión: " . $conexion->connect_error);
 }
 
-// Tablas que se van a administrar
+
 $tablas = [
   "tipo_equipo"        => "Tipo de Equipo",
   "marca"              => "Marca",
@@ -29,7 +29,7 @@ $tablas = [
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Panel Administrador</title>
 
-  <!-- Tipografía moderna -->
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
@@ -38,7 +38,7 @@ $tablas = [
       --primary:#1976d2; --primary-600:#1565c0;
       --danger:#d32f2f; --danger-600:#b71c1c; --border:#e5e7eb;
 
-      /* Nuevas vars para look pro */
+      
       --card-radius: 14px;
       --shadow-sm: 0 4px 10px rgba(2, 6, 23, .06);
       --shadow-md: 0 10px 24px rgba(2, 6, 23, .08);
@@ -54,7 +54,7 @@ $tablas = [
       font-size:14px;
     }
 
-    /* Contenedor centrado */
+    
     .container{
       max-width: 1500px;
       margin: 32px auto 60px;
@@ -68,17 +68,17 @@ $tablas = [
     h1{ text-align:center; margin: 0 0 16px; font-size:20px; }
     .sub{ text-align:center; color:var(--muted); margin:0 0 18px; font-size:12px;}
 
-    /* Alerta */
+    
     #alerta{ border-radius:10px; padding:10px 12px; margin:10px 0 18px; font-size:13px }
 
-    /* Tarjeta por tabla */
+    
     .tabla-container{
       border:1px solid var(--border); border-radius:12px; padding:14px; margin: 18px 0 24px;
       background:#fff;
     }
     .tabla-container h2{ margin:0 0 10px; font-size:16px }
 
-    /* Form agregar */
+    
     .inline-form{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px }
     .input{
       height:32px; padding:0 10px; border:1px solid #d1d5db; border-radius:8px; font-size:13px; min-width:220px;
@@ -93,20 +93,20 @@ $tablas = [
     .btn.danger{ background:var(--danger); color:#fff }
     .btn.danger:hover{ background:var(--danger-600) }
 
-    /* Tabla compacta */
+    
     .table-wrap{ overflow:auto; border:1px solid var(--border); border-radius:10px }
     table{ border-collapse:collapse; width:100%; background:#fff; font-size:13px }
     th, td{ padding:8px 10px; border-bottom:1px solid var(--border) }
     th{ background:#f9fafb; text-align:left; position:sticky; top:0; z-index:1 }
     tr:nth-child(even) td{ background:#fafafa }
 
-    /* Acciones en fila */
+    
     .acciones{ white-space:nowrap }
     .acciones form{ display:inline-flex; gap:8px; align-items:center; margin:0 8px 0 0 }
     .acciones input[type="text"]{ height:30px; padding:0 8px; border:1px solid #d1d5db; border-radius:8px; width:200px; font-size:13px }
     .acciones .btn{ height:30px; padding:0 10px }
 
-    /* Botón fijo logout */
+    
     .btn-logout{
       position:fixed; top:14px; right:18px; z-index:9999;
       background:var(--danger); color:#fff; padding:6px 12px; border-radius:8px;
@@ -118,10 +118,10 @@ $tablas = [
       .input{ min-width:180px }
       .acciones input[type="text"]{ width:160px }
     }
-    /* Más espacio real para la última columna */
+   
     td.acciones { width: 460px !important; }
 
-    /* Acomodo de acciones: en fila, con espacio y sin que se aplasten */
+   
     .acciones{ display: flex; gap: 10px; align-items: center; justify-content: flex-start; white-space: nowrap; }
     .acciones form{ margin: 0; }
     .acciones .btn{ min-width: 74px; text-align: center; }
@@ -138,7 +138,7 @@ $tablas = [
     @keyframes aparecer { 0%{opacity:0;transform:translateY(15px)} 100%{opacity:1;transform:translateY(0)} }
     @keyframes brillo   { 0%,100%{text-shadow:0 0 5px #90caf9,0 0 10px #64b5f6} 50%{text-shadow:0 0 15px #64b5f6,0 0 25px #42a5f5} }
 
-    /* ======= ESTILOS DEL DASHBOARD (Mejorados) ======= */
+    
     .dash-card{
       background: linear-gradient(180deg,#ffffff,#fbfcff);
       border:1px solid var(--border); border-radius:var(--card-radius);
@@ -160,17 +160,17 @@ $tablas = [
 
     .chart-box{ height:320px; padding:6px 6px 0 6px; }
 
-    /* Tabla del dashboard con mejor contraste */
+    
     #tabla-sedes-dash{ border-collapse: separate; border-spacing: 0; }
     #tabla-sedes-dash thead th{
       background:#f6f8fb; color:#334155; border-bottom:1px solid #e6eaf2;
     }
     #tabla-sedes-dash tbody tr td{ border-bottom:1px dashed #eaeef6; }
     #tabla-sedes-dash tbody tr:hover td{ background:#f9fbff; }
-    #tabla-sedes-dash td:nth-child(n+2){ text-align: right; } /* números alineados */
+    #tabla-sedes-dash td:nth-child(n+2){ text-align: right; } 
   </style>
 
-  <!-- Chart.js -->
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -180,9 +180,9 @@ $tablas = [
     <h1 class="titulo-admin">Panel Administrator📊</h1>
     <p class="subtitulo-admin">⚙️Gestiona o modifica los valores que usa en el formulario principal</p>
 
-    <!-- ========== DASHBOARD DE SEDES ========== -->
+    
     <section class="dash-card" id="dash-sedes">
-      <!-- Filtros -->
+     
       <div class="filters-row">
         <input type="date" id="filtro-from" class="input">
         <input type="date" id="filtro-to" class="input">
@@ -205,7 +205,7 @@ $tablas = [
         <button class="btn primary" id="btn-aplicar">Aplicar</button>
       </div>
 
-      <!-- KPIs -->
+     
       <div class="kpis-row">
         <div class="kpi-card dash-card">
           <b>Total Global</b>
@@ -221,12 +221,12 @@ $tablas = [
         </div>
       </div>
 
-      <!-- Gráfico -->
+      
       <div class="dash-card chart-box">
         <canvas id="grafico-sedes"></canvas>
       </div>
 
-      <!-- Tabla por sede (desglose completo) -->
+      
       <div class="table-wrap" style="margin-top:12px">
         <table id="tabla-sedes-dash">
           <thead>
@@ -244,7 +244,7 @@ $tablas = [
         </table>
       </div>
     </section>
-    <!-- ========== FIN DASHBOARD ========== -->
+    
 
     <?php
       $mensaje = $_GET['msg'] ?? '';
@@ -279,14 +279,14 @@ $tablas = [
       <div class="tabla-container" id="<?= $tabla ?>">
         <h2><?= $titulo ?></h2>
 
-        <!-- Agregar -->
+      
         <form method="POST" action="guardar_valor.php" class="inline-form">
           <input type="hidden" name="tabla" value="<?= $tabla ?>">
           <input class="input" type="text" name="nombre" placeholder="Nuevo valor" required>
           <button class="btn primary" type="submit">Agregar</button>
         </form>
 
-        <!-- Tabla -->
+        
         <div class="table-wrap">
           <table>
             <tr>
@@ -302,7 +302,7 @@ $tablas = [
                 <td><?= (int)$fila['id'] ?></td>
                 <td><?= htmlspecialchars($fila['nombre']) ?></td>
                 <td class="acciones">
-                  <!-- Editar -->
+                  
                   <form method="POST" action="editar_valor.php" class="inline-form" style="margin:0;">
                     <input type="hidden" name="tabla" value="<?= $tabla ?>">
                     <input type="hidden" name="id" value="<?= (int)$fila['id'] ?>">
@@ -310,7 +310,7 @@ $tablas = [
                     <button class="btn primary" type="submit">Editar</button>
                   </form>
 
-                  <!-- Eliminar -->
+                  
                   <form method="POST" action="eliminar_valor.php" style="display:inline;" onsubmit="return confirm('¿Seguro que deseas eliminar este valor?');">
                     <input type="hidden" name="tabla" value="<?= $tabla ?>">
                     <input type="hidden" name="id" value="<?= (int)$fila['id'] ?>">
@@ -334,7 +334,7 @@ $tablas = [
   </div>
 
   <script>
-    // ===== Dashboard por sedes =====
+  
     let chartSedes = null;
 
     function cargarKpisSedes() {
@@ -345,19 +345,19 @@ $tablas = [
 
       const qs = new URLSearchParams({from, to, type, status}).toString();
 
-      // Endpoint en la raíz del proyecto
+     
       fetch("../admin_kpis_sedes.php?" + qs, { credentials: "same-origin" })
         .then(r => r.json())
         .then(data => {
           if (!data.ok) { console.error(data); alert(data.error || "Error"); return; }
 
-          // KPIs
+         
           document.getElementById("kpi-total").textContent  = data.resumen.total_global ?? 0;
           document.getElementById("kpi-lider").textContent  =
             data.resumen.sede_lider ? `${data.resumen.sede_lider.nombre} (${data.resumen.sede_lider.total})` : "-";
           document.getElementById("kpi-brecha").textContent = data.resumen.brecha_vs_segundo ?? 0;
 
-          // Tabla (desglose)
+          
           const tbody = document.querySelector("#tabla-sedes-dash tbody");
           tbody.innerHTML = "";
           (data.por_sede || []).forEach(s => {
@@ -376,12 +376,12 @@ $tablas = [
             tbody.appendChild(tr);
           });
 
-          // ===== Gráfico por total (look pro: gradiente + radios) =====
+         
           const labels = (data.por_sede || []).map(s => s.nombre);
           const values = (data.por_sede || []).map(s => s.total);
           const ctx = document.getElementById("grafico-sedes").getContext("2d");
 
-          // Gradiente suave
+         
           const grad = ctx.createLinearGradient(0, 0, 0, 320);
           grad.addColorStop(0,   "rgba(25,118,210,0.85)");
           grad.addColorStop(1.0, "rgba(25,118,210,0.25)");

@@ -1,5 +1,5 @@
 <?php
-include '../conexion.php'; // cambia la ruta si lo necesitas
+include '../conexion.php'; 
 session_start();
 if ($_SESSION['rol'] !== 'admin') {
     header("Location: ../index.php");

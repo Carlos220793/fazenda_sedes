@@ -13,14 +13,13 @@ $tabla  = $_POST['tabla']  ?? '';
 $nombre = $_POST['nombre'] ?? '';
 
 $nombre = trim($nombre);
-$nombre = preg_replace('/\s+/', ' ', $nombre); // limpia espacios dobles
+$nombre = preg_replace('/\s+/', ' ', $nombre); 
 
 if ($tabla === '' || $nombre === '') {
   header("Location: panel_admin.php?msg=faltan_datos&tabla=$tabla"); exit;
 }
 
-/* Evita insertar si ya existe (case sensitive igual a la BD; si quieres case-insensitive
-   cambia la collation de la columna a *_ci o usa LOWER(nombre)=LOWER(?) ) */
+
 $chk = $cx->prepare("SELECT 1 FROM $tabla WHERE nombre = ?");
 $chk->bind_param("s", $nombre);
 $chk->execute();

@@ -1,45 +1,42 @@
 <?php
-require_once __DIR__ . '/api_bootstrap.php';
-require_once __DIR__ . '/auth.php';
-requireLoginOrExit();
-maybeDebugAndExit();
 
-/* =============================
-   CORS + Sesión (keep-alive)
-   ============================= */
-
-// Orígenes permitidos (ajusta si sirves el front desde otro host/puerto)
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 $allowedOrigins = [
     'http://10.110.6.148',
-    'http://localhost'
+    'http://localhost',          
 ];
 
 if (in_array($origin, $allowedOrigins, true)) {
     header("Access-Control-Allow-Origin: $origin");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 }
 header("Content-Type: application/json; charset=utf-8");
 
-// Responder preflight
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
 }
 
-// Asegurar sesión activa (por si el auth no la abrió)
+
+require_once __DIR__ . '/api_bootstrap.php';
+require_once __DIR__ . '/auth.php';
+requireLoginOrExit();
+maybeDebugAndExit();
+
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     @session_start();
 }
 
-// Expiración por inactividad y renovación deslizante
-$SESSION_IDLE_MAX = 7200; // 2 horas; ajusta según tu política
+$SESSION_IDLE_MAX = 7200; 
 
 if (!empty($_SESSION['usuario_id'])) {
     $now = time();
 
-    // Si excedió el tiempo de inactividad, cerrar sesión y responder 401
+   
     if (isset($_SESSION['last_activity']) && ($now - $_SESSION['last_activity'] > $SESSION_IDLE_MAX)) {
         $_SESSION = [];
         if (ini_get("session.use_cookies")) {
@@ -60,24 +57,21 @@ if (!empty($_SESSION['usuario_id'])) {
         exit;
     }
 
-    // Refrescar actividad
+   
     $_SESSION['last_activity'] = $now;
 
-    // Renovar cookie (Sliding expiration)
+   
     $params = session_get_cookie_params();
     setcookie(session_name(), session_id(), [
         'expires'  => $now + $SESSION_IDLE_MAX,
         'path'     => $params['path'] ?: '/',
         'domain'   => $params['domain'] ?? '',
-        'secure'   => $params['secure'] ?? false,  // true si usas HTTPS
+        'secure'   => $params['secure'] ?? false,  
         'httponly' => $params['httponly'] ?? true,
         'samesite' => $params['samesite'] ?? 'Lax',
     ]);
 }
 
-/* =============================
-   Lógica original
-   ============================= */
 
 $cn = new mysqli("10.110.6.148", "BaseDatos", "sysadm1n2207", "mantenimientos");
 if ($cn->connect_error) {
@@ -89,7 +83,7 @@ if ($cn->connect_error) {
 }
 $cn->set_charset("utf8mb4");
 
-// Función para estandarizar el estado
+
 function canonEstado($v) {
     $e = mb_strtolower(trim($v ?? ''), 'UTF-8');
     if ($e === 'pendiente') return 'Pendiente';
@@ -98,7 +92,7 @@ function canonEstado($v) {
     return 'Pendiente';
 }
 
-// Consulta con filtro por sede
+
 if (isAdmin()) {
     $sql  = "SELECT * FROM registros ORDER BY fecha_registro DESC";
     $stmt = $cn->prepare($sql);
@@ -118,16 +112,16 @@ $res = $stmt->get_result();
 
 $registros = [];
 while ($fila = $res->fetch_assoc()) {
-    // Estandarizar estado
+   
     $fila['estado'] = canonEstado($fila['estado'] ?? '');
 
-    // Renombrar claves para el frontend
+   
     if (array_key_exists('tipo_mantenimiento', $fila)) $fila['tipoMantenimiento'] = $fila['tipo_mantenimiento'];
     if (array_key_exists('centro_costo', $fila))       $fila['centroCosto']       = $fila['centro_costo'];
     if (array_key_exists('usuario_registro', $fila))   $fila['usuarioRegistro']   = $fila['usuario_registro'];
     $fila['urlTicket'] = $fila['url_ticket'] ?? '';
 
-    // Quitar snake_case (si existen)
+   
     unset($fila['tipo_mantenimiento'], $fila['centro_costo'], $fila['usuario_registro'], $fila['url_ticket']);
 
     $registros[] = $fila;
