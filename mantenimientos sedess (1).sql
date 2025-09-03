@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-08-2025 a las 16:14:16
+-- Tiempo de generación: 03-09-2025 a las 21:02:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -259,12 +259,14 @@ INSERT INTO `registros` (`id`, `tipo`, `placa`, `marca`, `serial`, `fecha`, `tec
 (148, 'Computador de escritorio', 'EC-04040', 'Lenovo', '000138812-000', '2025-08-06', 'Pasante 1 Infraestructura', 'Preventivo', 'Finalizado', 'Porcicultura', '11A0302002', 'https://aliar.freshservice.com/helpdesk/tickets/68889', '', '2025-08-06 17:18:11', 'tecnico', 'Otro...', 5),
 (169, 'Radio', 'EC-01493', 'Motorola', '000054525-000	', '2025-08-12', 'Pasante 1 Infraestructura', 'Preventivo', 'Finalizado', 'Porcicultura', '11A0103034', 'https://aliar.freshservice.com/a/tickets/68348?current_tab=details', '', '2025-08-12 20:34:04', 'Administrador', 'DEP-450', 5),
 (170, 'Radio', 'EC-01487', 'Motorola', '000054522-000	', '2025-08-12', 'Pasante 1 Infraestructura', 'Preventivo', 'Finalizado', 'Porcicultura', '11A0103034', 'https://aliar.freshservice.com/a/tickets/68348?current_tab=details', '', '2025-08-12 20:35:03', 'Administrador', 'DEP-450', 5),
-(178, 'Computador portátil', 'EC-04847', 'Epson', '037667', '2025-08-13', 'Wuilmer Andres Roman', 'Preventivo', 'Pendiente', 'Admin Fincas', '111111111111111', 'http://10.110.6.148/mantenimientos/index.html', '', '2025-08-13 10:50:20', 'bogota', 'ThinkPad T480', 6),
-(179, 'Computador de escritorio', 'EC-03987', 'HP', '3252353', '2025-08-13', 'Wuilmer Andres Roman', 'Correctivo', 'En Progreso', 'Admin Fincas', '111111111111111', 'https://aliar.freshservice.com/helpdesk/tickets/68889', '', '2025-08-13 10:51:25', 'santander', 'EliteBook 840 G5', 7),
-(180, 'Impresora', 'EC-04847', 'Lenovo', '3252353', '2025-08-13', 'Maicol Esteban Cardenas', 'Preventivo', 'En Progreso', 'Agricultura FZ', 'HGYJGJY', 'http://10.110.6.148/mantenimientos/index.html', '', '2025-08-13 10:52:01', 'cundinamarca', 'OptiPlex 7070', 8),
 (182, 'Radio', 'EC04655', 'Motorola', 'Y52EY5X958', '2025-08-04', 'Pasante 2 Comunicaciones', 'Correctivo / Preventivo', 'Finalizado', 'Taller SF', '11A0502001-ADMON TALLERES', 'https://aliar.freshservice.com/a/tickets/68168?current_tab=details', '', '2025-08-14 08:38:02', 'Regional.meta_Fincas', 'DEP-450', 5),
 (183, 'Radio', 'EC04655', 'Motorola', 'Y52EY5X958', '2025-08-04', 'Pasante 2 Comunicaciones', 'Correctivo / Preventivo', 'Finalizado', 'Taller SF', '11A0502001-ADMON TALLERES', 'https://aliar.freshservice.com/a/tickets/68168?current_tab=details', '', '2025-08-14 08:38:02', 'Regional.meta_Fincas', 'DEP-450', 5),
-(184, 'Radio', 'EC01629', 'Motorola', '7521SW6671', '2025-08-04', 'Pasante 2 Comunicaciones', 'Correctivo / Preventivo', 'Finalizado', 'Taller SF', '11A0502001-ADMON TALLERES', 'https://aliar.freshservice.com/a/tickets/68168?current_tab=details', '', '2025-08-14 08:44:05', 'Regional.meta_Fincas', 'DEP-450', 5);
+(184, 'Radio', 'EC01629', 'Motorola', '7521SW6671', '2025-08-04', 'Pasante 2 Comunicaciones', 'Correctivo / Preventivo', 'Finalizado', 'Taller SF', '11A0502001-ADMON TALLERES', 'https://aliar.freshservice.com/a/tickets/68168?current_tab=details', '', '2025-08-14 08:44:05', 'Regional.meta_Fincas', 'DEP-450', 5),
+(192, 'Computador de escritorio', 'EC-02691', 'Lenovo', '000112735-000', '2025-08-20', 'Pasante 1 Infraestructura', 'Preventivo', 'Finalizado', 'Planta Extractora', '11A0102008', 'https://aliar.freshservice.com/helpdesk/tickets/68755', '', '2025-08-20 15:06:18', 'Regional Meta', 'ThinkPad T480', 5),
+(194, 'Computador portátil', 'EC-05950', 'Lenovo', 'PF-4QV1PY', '2025-08-23', 'Pasante 1 Infraestructura', 'Preventivo', 'Finalizado', 'Planta Extractora', '11A0102001', 'https://aliar.freshservice.com/helpdesk/tickets/69955', '', '2025-08-23 10:24:49', 'Regional Meta', 'ThinkPad T480', 5),
+(198, 'Computador portátil', 'EC-01561', 'Lenovo', '000060185-000', '2025-08-29', 'Pasante 1 Infraestructura', 'Preventivo', 'Finalizado', 'Planta Extractora', '11A0102008', 'https://aliar.freshservice.com/helpdesk/tickets/69399', '', '2025-08-30 08:47:21', 'Regional Meta', 'ThinkPad T480', 5),
+(199, 'Computador portátil', 'EC-04790', 'Lenovo', 'MJ0KHXE3', '2025-08-30', 'Pasante 2 Comunicaciones', 'Preventivo', 'Finalizado', 'Planta Extractora', '11A0102009', 'https://aliar.freshservice.com/helpdesk/tickets/69399', '', '2025-08-30 08:48:37', 'Regional Meta', 'ThinkPad T480', 5),
+(208, 'Computador de escritorio', 'EC-048333', 'Epson', '000054515-000', '2025-09-03', 'Johel Fernando Garnica', 'Correctivo', 'En Progreso', 'Agricultura FZ', '111111111111111', 'https://aliar.freshservice.com/a/tickets/68348?current_tab=details', '', '2025-09-03 11:39:26', 'Regional Santander', 'L3150', 7);
 
 -- --------------------------------------------------------
 
@@ -283,7 +285,7 @@ CREATE TABLE `sedes` (
 
 INSERT INTO `sedes` (`id_sede`, `nombre`) VALUES
 (6, 'Regional Bogotá'),
-(8, 'Regional Cundinamarca'),
+(8, 'Regional Frigorificos'),
 (5, 'Regional Meta'),
 (7, 'Regional Santander');
 
@@ -355,8 +357,7 @@ INSERT INTO `tipo_equipo` (`id`, `nombre`, `estado`) VALUES
 (22, 'Radio', 'activo'),
 (23, 'VideoCoferencia', 'activo'),
 (24, 'Otro...', 'activo'),
-(25, 'Nvr', 'activo'),
-(33, 'Agropeguaria-Aliar', 'activo');
+(25, 'Nvr', 'activo');
 
 -- --------------------------------------------------------
 
@@ -443,9 +444,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `usuario`, `clave`, `rol`, `id_sede`) VALUES
-(1, 'Regional Cundinamarca Bogotá', 'Regional.bogota', '06479151e6eae64b0cfead67ad7c74f77e79ae9f70091a2dc05ba5c880fe17b3', 'sede_user', 6),
-(2, 'Regional Santander', 'Regional.santander', '3c57d78f1f8011be373301ee3cc7f3baf468aff3de12fa0542c21a2cc4fc81f3', 'sede_user', 7),
-(3, 'Regional Frigorifico', 'Regional.frigorificos', 'frigorifico123', 'sede_user', 8);
+(1, 'Regional Cundinamarca Bogotá', 'Regional.bogota', 'BogotaTecno2025', 'sede_user', 6),
+(2, 'Regional Santander', 'Regional.santander', 'Stecno2025', 'sede_user', 7),
+(3, 'Regional Frigorifico', 'Regional.frigorificos', 'FrigTec2025', 'sede_user', 8);
 
 --
 -- Índices para tablas volcadas
@@ -549,7 +550,7 @@ ALTER TABLE `modelo`
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
 
 --
 -- AUTO_INCREMENT de la tabla `sedes`
@@ -573,7 +574,7 @@ ALTER TABLE `tickets`
 -- AUTO_INCREMENT de la tabla `tipo_equipo`
 --
 ALTER TABLE `tipo_equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_mantenimiento`
