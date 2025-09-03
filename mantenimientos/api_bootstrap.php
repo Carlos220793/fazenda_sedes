@@ -40,7 +40,7 @@ set_error_handler(function($errno, $errstr, $errfile, $errline) {
   
   error_log("PHP ERROR [$errno] $errstr in $errfile:$errline");
   if (!headers_sent()) { http_response_code(500); }
-  // Limpia cualquier salida y devuelve JSON de error
+  
   while (ob_get_level() > 0) ob_end_clean();
   echo json_encode(['success'=>false,'error'=>'Error interno (ver log)']);
   exit;

@@ -24,30 +24,30 @@ function normalize_date($d){
   return null;
 }
 
-/* Seguridad: solo admin */
+
 if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "admin") {
   out(["ok"=>false, "error"=>"Acceso denegado (solo admin)"], 403);
 }
 
-/* Conexión */
+
 $cn = @new mysqli("10.110.6.148", "BaseDatos", "sysadm1n2207", "mantenimientos");
 if ($cn->connect_error) out(["ok"=>false, "error"=>"Sin conexión a base de datos", "mysql"=>$cn->connect_error], 500);
 $cn->set_charset("utf8mb4");
 
-/* Filtros */
+
 $fromIn   = $_GET["from"]   ?? null;
 $toIn     = $_GET["to"]     ?? null;
-$typeIn   = $_GET["type"]   ?? null;   // Preventivo | Correctivo | all
-$statusIn = $_GET["status"] ?? null;   // all | abierto | cerrado | pendiente | en_progreso | finalizado
+$typeIn   = $_GET["type"]   ?? null;   
+$statusIn = $_GET["status"] ?? null;   
 
 $from = normalize_date($fromIn);
 $to   = normalize_date($toIn);
 
 $type = (isset($typeIn) && strtolower($typeIn) !== "all") ? trim($typeIn) : null;
 
-/* Mapeo de estado pedido → estados reales en BD */
-$status = null;           // nombre del filtro que vino
-$statusSet = [];          // lista para IN (...)
+
+$status = null;           
+$statusSet = [];          
 if (isset($statusIn) && strtolower($statusIn) !== "all") {
   $status = strtolower(trim($statusIn));
   if ($status === "abierto") {
@@ -63,7 +63,7 @@ if (isset($statusIn) && strtolower($statusIn) !== "all") {
   }
 }
 
-/* WHERE dinámico */
+
 $where  = [];
 $params = [];
 $types  = "";
@@ -81,7 +81,7 @@ if (!empty($statusSet)) {
   foreach ($statusSet as $st) { $params[] = $st; $types .= "s"; }
 }
 
-/* Agregación por sede con desglose completo */
+
 $sql = "
   SELECT
     s.id_sede,

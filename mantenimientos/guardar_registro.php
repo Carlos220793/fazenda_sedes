@@ -7,7 +7,6 @@ requireLoginOrExit();
 
 header('Content-Type: application/json; charset=utf-8');
 
-
 header('Access-Control-Allow-Origin: *');
 
 $cn = new mysqli("10.110.6.148", "BaseDatos", "sysadm1n2207", "mantenimientos");
@@ -17,13 +16,11 @@ if ($cn->connect_error) {
 }
 $cn->set_charset('utf8mb4');
 
-
 $input = json_decode(file_get_contents("php://input"), true);
 if (!$input) {
   echo json_encode(['success'=>false, 'error'=>'No se recibió ningún dato']);
   exit;
 }
-
 
 $tipo               = trim($input["tipo"]               ?? '');
 $placa              = trim($input["placa"]              ?? '');
@@ -55,6 +52,28 @@ if (isAdmin()) {
 if ($sede_id === null) {
   echo json_encode(['success'=>false, 'error'=>'Sede no definida en sesión']);
   exit;
+}
+
+
+$sede_nombre = '';
+if (!empty($input['sede_nombre']) && is_string($input['sede_nombre'])) {
+  $sede_nombre = trim($input['sede_nombre']);
+} elseif (!empty($_SESSION['sede_nombre'])) {
+  $sede_nombre = trim((string)$_SESSION['sede_nombre']);
+} else {
+  
+  if ($q = $cn->prepare("SELECT nombre FROM sedes WHERE id_sede = ?")) {
+    $q->bind_param("i", $sede_id);
+    if ($q->execute()) {
+      $q->bind_result($nombre);
+      if ($q->fetch()) $sede_nombre = $nombre;
+    }
+    $q->close();
+  }
+}
+
+if ($sede_nombre !== '') {
+  $usuario_registro = $sede_nombre;
 }
 
 

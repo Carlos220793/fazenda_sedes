@@ -8,7 +8,7 @@ if ($conexion->connect_error) {
     die("❌ Error de conexión: " . $conexion->connect_error);
 }
 
-$conexion->set_charset("utf8mb4"); // para acentos/ñ
+$conexion->set_charset("utf8mb4"); 
 
 $resultado = mysqli_query($conexion, "SELECT nombre FROM ubicacion ORDER BY nombre ASC");
 

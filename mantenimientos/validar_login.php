@@ -44,7 +44,7 @@ if ($u === $usuarioAdmin && $c === $claveAdmin) {
     "success"      => true,
     "role"         => "admin",
     "sede_id"      => null,
-    "sede_nombre"  => $sedeNombre   // ADD
+    "sede_nombre"  => $sedeNombre   
   ]);
   exit;
 }
@@ -116,7 +116,7 @@ if (!$cn->connect_error) {
           "success"      => true,
           "role"         => "admin",
           "sede_id"      => null,
-          "sede_nombre"  => $sedeNombre   // ADD
+          "sede_nombre"  => $sedeNombre   
         ]);
       } else {
         unset($_SESSION["admin"]);
@@ -132,7 +132,7 @@ if (!$cn->connect_error) {
           "success"      => true,
           "role"         => "user",
           "sede_id"      => $_SESSION["sede_id"],
-          "sede_nombre"  => $sedeNombre   // ADD
+          "sede_nombre"  => $sedeNombre   
         ]);
       }
       $cn->close();

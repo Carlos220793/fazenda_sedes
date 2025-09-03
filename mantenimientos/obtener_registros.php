@@ -3,7 +3,7 @@
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 $allowedOrigins = [
     'http://10.110.6.148',
-    'http://localhost',          
+    'http://localhost',
 ];
 
 if (in_array($origin, $allowedOrigins, true)) {
@@ -14,18 +14,15 @@ if (in_array($origin, $allowedOrigins, true)) {
 }
 header("Content-Type: application/json; charset=utf-8");
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
 }
 
-
 require_once __DIR__ . '/api_bootstrap.php';
 require_once __DIR__ . '/auth.php';
 requireLoginOrExit();
 maybeDebugAndExit();
-
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     @session_start();
@@ -36,7 +33,7 @@ $SESSION_IDLE_MAX = 7200;
 if (!empty($_SESSION['usuario_id'])) {
     $now = time();
 
-   
+    
     if (isset($_SESSION['last_activity']) && ($now - $_SESSION['last_activity'] > $SESSION_IDLE_MAX)) {
         $_SESSION = [];
         if (ini_get("session.use_cookies")) {
@@ -66,12 +63,11 @@ if (!empty($_SESSION['usuario_id'])) {
         'expires'  => $now + $SESSION_IDLE_MAX,
         'path'     => $params['path'] ?: '/',
         'domain'   => $params['domain'] ?? '',
-        'secure'   => $params['secure'] ?? false,  
+        'secure'   => $params['secure'] ?? false,
         'httponly' => $params['httponly'] ?? true,
         'samesite' => $params['samesite'] ?? 'Lax',
     ]);
 }
-
 
 $cn = new mysqli("10.110.6.148", "BaseDatos", "sysadm1n2207", "mantenimientos");
 if ($cn->connect_error) {
@@ -83,7 +79,6 @@ if ($cn->connect_error) {
 }
 $cn->set_charset("utf8mb4");
 
-
 function canonEstado($v) {
     $e = mb_strtolower(trim($v ?? ''), 'UTF-8');
     if ($e === 'pendiente') return 'Pendiente';
@@ -94,7 +89,10 @@ function canonEstado($v) {
 
 
 if (isAdmin()) {
-    $sql  = "SELECT * FROM registros ORDER BY fecha_registro DESC";
+    $sql  = "SELECT r.*, s.nombre AS sede_nombre
+             FROM registros r
+             LEFT JOIN sedes s ON s.id_sede = r.sede_id
+             ORDER BY r.fecha_registro DESC";
     $stmt = $cn->prepare($sql);
 } else {
     $sede = userSedeId();
@@ -102,7 +100,11 @@ if (isAdmin()) {
         echo json_encode([]);
         exit;
     }
-    $sql  = "SELECT * FROM registros WHERE sede_id = ? ORDER BY fecha_registro DESC";
+    $sql  = "SELECT r.*, s.nombre AS sede_nombre
+             FROM registros r
+             LEFT JOIN sedes s ON s.id_sede = r.sede_id
+             WHERE r.sede_id = ?
+             ORDER BY r.fecha_registro DESC";
     $stmt = $cn->prepare($sql);
     $stmt->bind_param("i", $sede);
 }
@@ -112,16 +114,19 @@ $res = $stmt->get_result();
 
 $registros = [];
 while ($fila = $res->fetch_assoc()) {
-   
+
     $fila['estado'] = canonEstado($fila['estado'] ?? '');
 
-   
+  
     if (array_key_exists('tipo_mantenimiento', $fila)) $fila['tipoMantenimiento'] = $fila['tipo_mantenimiento'];
     if (array_key_exists('centro_costo', $fila))       $fila['centroCosto']       = $fila['centro_costo'];
     if (array_key_exists('usuario_registro', $fila))   $fila['usuarioRegistro']   = $fila['usuario_registro'];
     $fila['urlTicket'] = $fila['url_ticket'] ?? '';
 
-   
+    
+    $fila['sedeNombre'] = $fila['sede_nombre'] ?? '';
+
+
     unset($fila['tipo_mantenimiento'], $fila['centro_costo'], $fila['usuario_registro'], $fila['url_ticket']);
 
     $registros[] = $fila;
