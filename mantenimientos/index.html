@@ -937,6 +937,69 @@
 .registro-item:hover::after {
   left: 100%;
 }
+.stat-card {
+  perspective: 1200px;
+  border-radius: 14px;
+  min-height: 160px;   /* << antes 110px */
+  min-width: 180px;    /* << dale un ancho mínimo */
+}
+
+.stat-card .card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .8s cubic-bezier(.4,.2,.2,1);
+}
+
+.stat-card:hover .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 20px;         /* un poco más de aire */
+  border-radius: 14px;
+  backface-visibility: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+}
+
+.card-front {
+  background: #fff;
+  color: #0f172a;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, #2563eb, #16a34a);
+  color: #fff;
+}
+
+.card-front h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-front p {
+  font-size: 32px;    /* que se vea grandote el número */
+  margin: 0;
+  font-weight: 700;
+}
+
+.big-emoji {
+  font-size: 36px;    /* emoji trasero más grande */
+}
+
+.back-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 8px;
+}
 
 
   </style>
@@ -1001,26 +1064,71 @@
 </div>
 
 </header>
-
-
-    <div class="stats-container">
-      <div class="stat-card" onclick="verTodosLosRegistros()">
+<div class="stats-container">
+  
+  <div class="stat-card" onclick="verTodosLosRegistros()">
+    <div class="card-inner">
+      <div class="card-face card-front">
         <h3>Total Registros</h3>
         <p id="total">0</p>
       </div>
-      <div class="stat-card" onclick="verPendientes()">
+      <div class="card-face card-back">
+        <div class="back-content">
+          <span class="big-emoji">📊</span>
+          <div class="back-title">Ver todos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="stat-card" onclick="verPendientes()">
+    <div class="card-inner">
+      <div class="card-face card-front">
         <h3>Pendientes</h3>
         <p id="pendientes">0</p>
       </div>
-      <div class="stat-card" onclick="verEnProgreso()">
+      <div class="card-face card-back">
+        <div class="back-content">
+          <span class="big-emoji">👀</span>
+          <div class="back-title">Pendientes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="stat-card" onclick="verEnProgreso()">
+    <div class="card-inner">
+      <div class="card-face card-front">
         <h3>En Progreso</h3>
         <p id="en-progreso">0</p>
       </div>
-     <div class="stat-card" onclick="verFinalizados()">
+      <div class="card-face card-back">
+        <div class="back-content">
+          <span class="big-emoji">⚙️</span>
+          <div class="back-title">En Progreso</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="stat-card" onclick="verFinalizados()">
+    <div class="card-inner">
+      <div class="card-face card-front">
         <h3>Finalizados</h3>
         <p id="finalizados">0</p>
       </div>
+      <div class="card-face card-back">
+        <div class="back-content">
+          <span class="big-emoji">✅</span>
+          <div class="back-title">Finalizados</div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
   
    
