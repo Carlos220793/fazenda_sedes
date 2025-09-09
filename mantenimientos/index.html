@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Mantenimiento - IT Solutions</title>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
@@ -143,14 +145,28 @@
     }
 
     .nav-buttons button {
-      padding: 8px 16px;
-      background-color: #2a5298;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+  padding: 8px 16px;       
+  background-color: #2a5298;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;    
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
+}
+
+
+.nav-buttons button:hover {
+  background-color: #1e3c72; 
+  transform: translateY(-2px) scale(1.05); 
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+
+.nav-buttons button:active {
+  transform: scale(0.95);
+}
+
 
     .nav-buttons button:hover {
       background-color: #1e3c72;
@@ -262,16 +278,30 @@
       margin-top: 1rem;
     }
 
-    .form-actions button {
-      padding: 10px 20px;
-      background-color: #2a5298;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      font-weight: 500;
-    }
+   .form-actions button {
+  padding: 10px 20px;            
+  background-color: #2a5298;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
+}
+
+
+.form-actions button:hover {
+  background-color: #1e3c72;
+  transform: translateY(-2px) scale(1.04);  
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+
+.form-actions button:active {
+  transform: scale(0.95);
+}
+
 
     .form-actions button:hover {
       background-color: #1e3c72;
@@ -316,29 +346,47 @@
       gap: 10px;
       align-items: center;
     }
+.registro-actions button {
+  padding: 5px 10px;          
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
+}
 
-    .registro-actions button {
-      padding: 5px 10px;
-      font-size: 0.8rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: opacity 0.3s;
-    }
 
-    .registro-actions button:hover {
-      opacity: 0.9;
-    }
+.registro-actions button:hover {
+  transform: translateY(-2px) scale(1.05); 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  opacity: 0.95;
+}
 
-    .edit-btn {
-      background-color: #3498db;
-      color: white;
-    }
 
-    .delete-btn {
-      background-color: #e74c3c;
-      color: white;
-    }
+.registro-actions button:active {
+  transform: scale(0.92);
+}
+
+
+.edit-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #2c80b4;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
 
     .registro-details {
       display: grid;
@@ -395,14 +443,29 @@
     }
 
     .search-controls button {
-      padding: 10px 20px;
-      background-color: #2a5298;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 500;
-    }
+  padding: 10px 20px;   
+  background-color: #2a5298;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
+}
+
+
+.search-controls button:hover {
+  background-color: #1e3c72;
+  transform: translateY(-2px) scale(1.04); 
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+
+.search-controls button:active {
+  transform: scale(0.95);
+}
+
 
     .search-controls button:hover {
       background-color: #1e3c72;
@@ -614,6 +677,13 @@
   border-radius: 50%;       
   z-index: 1;
   pointer-events: none;
+  
+  transition: transform 0.6s ease, box-shadow 0.4s ease;
+}
+
+.titulo-con-imagen:hover::before {
+  transform: rotate(10deg) scale(1.1);  
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
 }
 .nav-buttons-container {
   position: relative;
@@ -913,13 +983,13 @@
   overflow: hidden;
 }
 
-/* Efecto cuando pasas el mouse */
+
 .registro-item:hover {
   transform: rotate3d(1, 1, 0, 6deg) scale(1.03);
   box-shadow: 0 15px 30px rgba(0, 150, 255, 0.4);
 }
 
-/* Glow animado */
+
 .registro-item::after {
   content: "";
   position: absolute;
@@ -940,8 +1010,8 @@
 .stat-card {
   perspective: 1200px;
   border-radius: 14px;
-  min-height: 160px;   /* << antes 110px */
-  min-width: 180px;    /* << dale un ancho mínimo */
+  min-height: 160px;   
+  min-width: 180px;    
 }
 
 .stat-card .card-inner {
@@ -962,7 +1032,7 @@
   display: grid;
   place-content: center;
   text-align: center;
-  padding: 20px;         /* un poco más de aire */
+  padding: 20px;         
   border-radius: 14px;
   backface-visibility: hidden;
   box-shadow: 0 8px 20px rgba(0,0,0,.12);
@@ -986,13 +1056,13 @@
 }
 
 .card-front p {
-  font-size: 32px;    /* que se vea grandote el número */
+  font-size: 32px;    
   margin: 0;
   font-weight: 700;
 }
 
 .big-emoji {
-  font-size: 36px;    /* emoji trasero más grande */
+  font-size: 36px;    
 }
 
 .back-title {
@@ -2212,16 +2282,17 @@ function eliminarRegistro(id) {
       return new Date(dateString).toLocaleDateString('es-ES', options);
     }
 
-    function exportarAExcel() {
-  const resultados = document.querySelectorAll('#resultados .registro-item');
-  if (resultados.length === 0) {
+
+async function exportarAExcel() {
+  const items = document.querySelectorAll('#resultados .registro-item');
+  if (items.length === 0) {
     alert('No hay resultados de búsqueda para exportar.');
     return;
   }
 
-  const datosExportar = [];
-
-  resultados.forEach(item => {
+  
+  const datos = [];
+  items.forEach(item => {
     const fila = {
       'Tipo de Equipo': '',
       'Placa': '',
@@ -2230,7 +2301,6 @@ function eliminarRegistro(id) {
       'Serial': '',
       'Fecha': '',
       'Técnico': '',
-      'Tipo de Mantenimiento': '',
       'Estado': '',
       'Ubicación': '',
       'Centro de Costo': '',
@@ -2240,48 +2310,135 @@ function eliminarRegistro(id) {
     };
 
     const detalles = item.querySelectorAll('.detail-item');
-    detalles.forEach(detalle => {
-      const label = detalle.querySelector('.detail-label')?.textContent.trim().toLowerCase();
-      const valor = detalle.querySelector('.detail-value')?.textContent.trim();
-
+    detalles.forEach(det => {
+      const label = det.querySelector('.detail-label')?.textContent.trim().toLowerCase();
+      const valor = det.querySelector('.detail-value')?.textContent.trim() || '';
       if (!label) return;
 
       if (label.includes('tipo de equipo')) fila['Tipo de Equipo'] = valor;
-      else if (label.includes('placa')) fila['Placa'] = valor;
-      else if (label.includes('marca') && !label.includes('marca/modelo')) fila['Marca'] = valor;
-      else if (label.includes('modelo')) fila['Modelo'] = valor;
-      else if (label.includes('serial')) fila['Serial'] = valor;
-      else if (label.includes('fecha')) fila['Fecha'] = valor;
-      else if (label.includes('técnico')) fila['Técnico'] = valor;
-      else if (label.includes('tipo mant')) fila['Tipo de Mantenimiento'] = valor;
+      else if (label.includes('placa'))     fila['Placa'] = valor;
+      else if (label.includes('marca'))     fila['Marca'] = valor;
+      else if (label.includes('modelo'))    fila['Modelo'] = valor;
+      else if (label.includes('serial'))    fila['Serial'] = valor;
+      else if (label.includes('fecha'))     fila['Fecha'] = valor;
+      else if (label.includes('técnico'))   fila['Técnico'] = valor;
       else if (label.includes('ubicación')) fila['Ubicación'] = valor;
-      else if (label.includes('centro')) fila['Centro de Costo'] = valor;
+      else if (label.includes('centro'))    fila['Centro de Costo'] = valor;
       else if (label.includes('observaciones')) fila['Observaciones'] = valor;
-      else if (label.includes('ticket')) {
-        const link = detalle.querySelector('a');
-        fila['Ticket'] = link ? link.href : valor;
-      }
+      else if (label.includes('ticket'))    fila['Ticket'] = valor;
       else if (label.includes('registrado')) fila['Registrado por'] = valor;
     });
 
+    
     fila['Estado'] = item.querySelector('.status-badge')?.textContent.trim() || '';
-    datosExportar.push(fila);
+    datos.push(fila);
   });
 
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(datosExportar);
-  XLSX.utils.book_append_sheet(wb, ws, 'Resultados');
+  
+  const wb = new ExcelJS.Workbook();
+  wb.creator = 'Mantenimientos Tecnología';
+  wb.created = new Date();
 
-  const fechaActual = new Date().toISOString().split('T')[0];
-  XLSX.writeFile(wb, `resultados_busqueda_${fechaActual}.xlsx`);
+  const ws = wb.addWorksheet('Resultados', { properties: { defaultRowHeight: 20 }});
+
+  
+  ws.mergeCells('A1:M1');
+  ws.getCell('A1').value = 'Mantenimientos – Resultados de búsqueda';
+  ws.getCell('A1').font = { bold: true, size: 16 };
+  ws.getCell('A1').alignment = { horizontal: 'center', vertical: 'middle' };
+  ws.getCell('A1').fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEAF1FF' } };
+
+  ws.mergeCells('A2:M2');
+  const hoy = new Date();
+  ws.getCell('A2').value = `Generado: ${hoy.toLocaleDateString('es-CO')} ${hoy.toLocaleTimeString('es-CO')}`;
+  ws.getCell('A2').alignment = { horizontal: 'center', vertical: 'middle' };
+  ws.getCell('A2').font = { size: 11, color: { argb: 'FF555555' } };
+
+  
+  const columnas = [
+    { header: 'Tipo de Equipo',   key: 'Tipo de Equipo',   width: 18 },
+    { header: 'Placa',            key: 'Placa',            width: 16 },
+    { header: 'Marca',            key: 'Marca',            width: 16 },
+    { header: 'Modelo',           key: 'Modelo',           width: 16 },
+    { header: 'Serial',           key: 'Serial',           width: 18 },
+    { header: 'Fecha',            key: 'Fecha',            width: 16 },
+    { header: 'Técnico',          key: 'Técnico',          width: 20 },
+    { header: 'Estado',           key: 'Estado',           width: 16 },
+    { header: 'Ubicación',        key: 'Ubicación',        width: 16 },
+    { header: 'Centro de Costo',  key: 'Centro de Costo',  width: 18 },
+    { header: 'Observaciones',    key: 'Observaciones',    width: 36 },
+    { header: 'Ticket',           key: 'Ticket',           width: 22 },
+    { header: 'Registrado por',   key: 'Registrado por',   width: 18 }
+  ];
+  ws.columns = columnas;
+
+  
+  const headerRowIndex = 4;
+  ws.addRow([]); 
+  const headerRow = ws.addRow(columnas.map(c => c.header));
+  headerRow.eachCell(cell => {
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E3C72' } };
+    cell.border = {
+      top: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+      left: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+      bottom: { style: 'thin', color: { argb: 'FF999999' } },
+      right: { style: 'thin', color: { argb: 'FFCCCCCC' } }
+    };
+  });
+
+  
+  datos.forEach((fila, idx) => {
+    const row = ws.addRow(columnas.map(c => fila[c.key] ?? ''));
+    row.height = 20;
+
+    
+    const isEven = idx % 2 === 1;
+    row.eachCell(cell => {
+      cell.alignment = { vertical: 'middle', wrapText: true };
+      cell.fill = isEven
+        ? { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF7FAFF' } }
+        : undefined;
+      cell.border = {
+        top: { style: 'thin', color: { argb: 'FFE6E6E6' } },
+        left: { style: 'thin', color: { argb: 'FFE6E6E6' } },
+        bottom: { style: 'thin', color: { argb: 'FFE6E6E6' } },
+        right: { style: 'thin', color: { argb: 'FFE6E6E6' } }
+      };
+    });
+
+    
+    const estadoColIndex = columnas.findIndex(c => c.key === 'Estado') + 1; 
+    const estadoCell = row.getCell(estadoColIndex);
+    const v = String(estadoCell.value || '').toLowerCase();
+    let color = null;
+    if (v.includes('pendiente'))  color = 'FFF39C12'; 
+    else if (v.includes('progreso')) color = 'FF3498DB'; 
+    else if (v.includes('finalizado')) color = 'FF2ECC71'; 
+
+    if (color) {
+      estadoCell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      estadoCell.alignment = { horizontal: 'center', vertical: 'middle' };
+      estadoCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: color } };
+    }
+  });
+
+  
+  ws.autoFilter = {
+    from: { row: headerRowIndex, column: 1 },
+    to:   { row: headerRowIndex, column: columnas.length }
+  };
+  ws.views = [{ state: 'frozen', xSplit: 0, ySplit: headerRowIndex }];
+
+  
+  const fechaArchivo = new Date().toISOString().split('T')[0];
+  const buffer = await wb.xlsx.writeBuffer();
+  saveAs(new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
+         `resultados_busqueda_${fechaArchivo}.xlsx`);
 }
 
 
-    window.addEventListener('click', (e) => {
-      if (e.target === modalEdicion) {
-        cerrarModal();
-      }
-    });
 
      function verHistorial(id) {
   
